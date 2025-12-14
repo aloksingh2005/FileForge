@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Formatter - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>📋 JSON Formatter & Validator</h1>
+                <p class="hero-subtitle">Format, validate, and minify JSON data</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Input JSON</h4>
+                <div class="card-content">
+                    <textarea id="inputJSON" rows="12" placeholder='{"name":"John","age":30}'
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-family: monospace; font-size: 0.9rem; resize: vertical;"></textarea>
+
+                    <div style="display: flex; gap: var(--spacing-sm); margin-top: var(--spacing-md); flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="formatJSON()">✨ Format</button>
+                        <button class="btn btn-secondary" onclick="minifyJSON()">📦 Minify</button>
+                        <button class="btn btn-secondary" onclick="validateJSON()">✅ Validate</button>
+                        <button class="btn btn-secondary" onclick="clearAll()">🗑️ Clear</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="resultSection" style="display: none;">
+                <div class="card">
+                    <h4 class="card-title">Output</h4>
+                    <div class="card-content">
+                        <textarea id="outputJSON" readonly rows="15"
+                            style="width: 100%; padding: var(--spacing-md); background: var(--bg-secondary); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); font-family: monospace; color: var(--text-primary); font-size: 0.9rem; resize: vertical;"></textarea>
+                        <button class="btn btn-success btn-block mt-md" onclick="copyResult()">📋 Copy Result</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/utils.js"></script>
+    <script src="../js/ui.js"></script>
+    <script>
+        function formatJSON() {
+            const input = document.getElementById('inputJSON').value;
+            if (!input.trim()) {
+                showToast('Please enter JSON data', 'warning');
+                return;
+            }
+
+            try {
+                const parsed = JSON.parse(input);
+                const formatted = JSON.stringify(parsed, null, 2);
+                document.getElementById('outputJSON').value = formatted;
+                document.getElementById('resultSection').style.display = 'block';
+                showToast('JSON formatted successfully!', 'success');
+            } catch (error) {
+                showToast('Invalid JSON: ' + error.message, 'error');
+            }
+        }
+
+        function minifyJSON() {
+            const input = document.getElementById('inputJSON').value;
+            if (!input.trim()) {
+                showToast('Please enter JSON data', 'warning');
+                return;
+            }
+
+            try {
+                const parsed = JSON.parse(input);
+                const minified = JSON.stringify(parsed);
+                document.getElementById('outputJSON').value = minified;
+                document.getElementById('resultSection').style.display = 'block';
+                showToast('JSON minified!', 'success');
+            } catch (error) {
+                showToast('Invalid JSON: ' + error.message, 'error');
+            }
+        }
+
+        function validateJSON() {
+            const input = document.getElementById('inputJSON').value;
+            if (!input.trim()) {
+                showToast('Please enter JSON data', 'warning');
+                return;
+            }
+
+            try {
+                JSON.parse(input);
+                showToast('✅ Valid JSON!', 'success');
+            } catch (error) {
+                showToast('❌ Invalid JSON: ' + error.message, 'error');
+            }
+        }
+
+        function clearAll() {
+            document.getElementById('inputJSON').value = '';
+            document.getElementById('outputJSON').value = '';
+            document.getElementById('resultSection').style.display = 'none';
+        }
+
+        function copyResult() {
+            const output = document.getElementById('outputJSON');
+            output.select();
+            document.execCommand('copy');
+            showToast('Copied!', 'success');
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discount Calculator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🏷️ Discount Calculator</h1>
+                <p class="hero-subtitle">Calculate discounts, sale prices, and savings</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Calculate Discount</h4>
+                <div class="card-content">
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Original Price</div>
+                        </div>
+                        <input type="number" id="originalPrice" placeholder="100" step="0.01" min="0"
+                            style="width: 150px; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Discount Percentage</div>
+                            <div class="settings-description" id="discountText">20%</div>
+                        </div>
+                        <input type="range" id="discountPercent" min="0" max="100" value="20" step="1"
+                            style="width: 300px;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">Result</h4>
+                <div class="card-content">
+                    <div
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--spacing-lg);">
+                        <div
+                            style="text-align: center; padding: var(--spacing-lg); background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); border-radius: var(--radius-md); color: white;">
+                            <div style="font-size: 0.875rem; margin-bottom: var(--spacing-sm); opacity: 0.9;">Final
+                                Price</div>
+                            <div style="font-size: 2.5rem; font-weight: 700;" id="finalPrice">$80.00</div>
+                        </div>
+                        <div
+                            style="text-align: center; padding: var(--spacing-lg); background: var(--bg-tertiary); border-radius: var(--radius-md);">
+                            <div
+                                style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: var(--spacing-sm);">
+                                You Save</div>
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--success);" id="savings">$20.00
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/utils.js"></script>
+    <script src="../js/ui.js"></script>
+    <script>
+        const originalPrice = document.getElementById('originalPrice');
+        const discountPercent = document.getElementById('discountPercent');
+        const discountText = document.getElementById('discountText');
+
+        originalPrice.addEventListener('input', calculate);
+        discountPercent.addEventListener('input', () => {
+            discountText.textContent = discount Percent.value + '%';
+            calculate();
+        });
+
+        function calculate() {
+            const price = parseFloat(originalPrice.value) || 0;
+            const discount = parseFloat(discountPercent.value) || 0;
+
+            const savingsAmount = (price * discount) / 100;
+            const final = price - savingsAmount;
+
+            document.getElementById('finalPrice').textContent = '$' + final.toFixed(2);
+            document.getElementById('savings').textContent = '$' + savingsAmount.toFixed(2);
+        }
+
+        calculate();
+    </script>
+</body>
+
+</html>
