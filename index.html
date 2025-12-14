@@ -5,25 +5,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description"
-    content="FileForge - Free online file processing tools. Convert images to PDF, compress files, merge PDFs, and more. 100% client-side, no uploads required.">
-  <meta name="keywords"
-    content="file converter, image to pdf, pdf merge, image compressor, background remover, online tools">
-  <title>FileForge - Free Online File Processing Tools</title>
+    content="FileForge Ultimate - 60+ free online tools for file processing, generators, calculators, converters, and more. All client-side, privacy-first.">
+  <meta name="keywords" content="file converter, tools, generators, calculators, pdf, image, utilities, online tools">
+  <title>FileForge Ultimate - 60+ Free Online Tools</title>
 
-  <!-- Preconnect to CDNs -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="styles/main.css">
   <link rel="stylesheet" href="styles/components.css">
-
-  <!-- Favicon -->
-  <link rel="icon"
-    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔨</text></svg>">
+  <link rel="stylesheet" href="styles/tabs.css">
 
   <!-- PWA Manifest -->
   <link rel="manifest" href="manifest.json">
@@ -31,6 +25,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="FileForge">
+
+  <!-- Favicon -->
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔨</text></svg>">
 </head>
 
 <body>
@@ -39,12 +37,10 @@
     <div class="container">
       <div class="header-content">
         <a href="index.html" class="logo">
-          🔨 FileForge
+          🔨 FileForge <span style="font-size: 0.7em; opacity: 0.8;">Ultimate</span>
         </a>
         <nav>
           <ul class="nav-links">
-            <li><a href="#tools">Tools</a></li>
-            <li><a href="#features">Features</a></li>
             <li><a href="https://github.com/aloksingh2005/FileForge" target="_blank">GitHub</a></li>
             <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
           </ul>
@@ -54,215 +50,261 @@
   </header>
 
   <!-- Hero Section -->
-  <section class="hero">
+  <section class="hero" style="padding: 3rem 0 2rem;">
     <div class="container container-narrow">
-      <h1 class="hero-title fade-in">Process Files in Your Browser</h1>
-      <p class="hero-subtitle fade-in">
-        Convert, compress, and transform your files instantly. 100% client-side processing means your files never leave
-        your device.
+      <h1 class="hero-title" style="font-size: 2.5rem;">60+ Free Online Tools</h1>
+      <p class="hero-subtitle">
+        All-in-one platform for file processing, generators, calculators, and utilities. 100% client-side,
+        privacy-first.
       </p>
-
-      <div class="hero-features">
-        <div class="hero-feature">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-              clip-rule="evenodd" />
-          </svg>
-          No uploads required
-        </div>
-        <div class="hero-feature">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-              clip-rule="evenodd" />
-          </svg>
-          100% private & secure
-        </div>
-        <div class="hero-feature">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-              clip-rule="evenodd" />
-          </svg>
-          Completely free
-        </div>
-        <div class="hero-feature">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-              clip-rule="evenodd" />
-          </svg>
-          Works offline
-        </div>
-      </div>
     </div>
   </section>
 
-  <!-- Tools Section -->
-  <main>
-    <section id="tools" class="container">
+  <!-- Search Bar -->
+  <div class="tool-search-container">
+    <div class="tool-search">
+      <span class="tool-search-icon">🔍</span>
+      <input type="text" id="toolSearch" placeholder="Search tools... (e.g., 'PDF', 'QR Code', 'Calculator')"
+        autocomplete="off">
+    </div>
+  </div>
+
+  <!-- Tab Navigation -->
+  <div class="tabs-container">
+    <div class="container">
+      <div class="tabs-wrapper">
+        <button class="tab active" data-category="file-processing">
+          <span class="tab-icon">📁</span>
+          File Processing
+          <span class="tab-count">9</span>
+        </button>
+        <button class="tab" data-category="generators">
+          <span class="tab-icon">🔧</span>
+          Generators
+          <span class="tab-count">10</span>
+        </button>
+        <button class="tab" data-category="calculators">
+          <span class="tab-icon">🔢</span>
+          Calculators
+          <span class="tab-count">10</span>
+        </button>
+        <button class="tab" data-category="converters">
+          <span class="tab-icon">🔄</span>
+          Converters
+          <span class="tab-count">8</span>
+        </button>
+        <button class="tab" data-category="design">
+          <span class="tab-icon">🎨</span>
+          Design
+          <span class="tab-count">8</span>
+        </button>
+        <button class="tab" data-category="media">
+          <span class="tab-icon">📷</span>
+          Media
+          <span class="tab-count">8</span>
+        </button>
+        <button class="tab" data-category="productivity">
+          <span class="tab-icon">⏱️</span>
+          Productivity
+          <span class="tab-count">8</span>
+        </button>
+        <button class="tab" data-category="dev-tools">
+          <span class="tab-icon">💻</span>
+          Dev Tools
+          <span class="tab-count">7</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab Contents -->
+  <main class="container">
+
+    <!-- File Processing Tab -->
+    <div class="tab-content active" data-category="file-processing">
+      <div class="category-header">
+        <h2 class="category-title">📁 File Processing Tools</h2>
+        <p class="category-description">Convert, compress, merge PDFs and images - all in your browser</p>
+      </div>
+
       <div class="tools-grid">
-        <!-- Image to PDF -->
-        <a href="tools/image-to-pdf.html" class="tool-card fade-in">
-          <div class="tool-icon">🖼️</div>
-          <div>
-            <h3 class="tool-title">Image to PDF</h3>
-            <p class="tool-description">
-              Convert multiple images into a single PDF document. Supports JPG, PNG, and WEBP formats.
-            </p>
-          </div>
-          <span class="tool-badge">Popular</span>
-        </a>
-
-        <!-- Image Compressor -->
-        <a href="tools/image-compressor.html" class="tool-card fade-in">
-          <div class="tool-icon">🗜️</div>
-          <div>
-            <h3 class="tool-title">Image Compressor</h3>
-            <p class="tool-description">
-              Reduce image file sizes while maintaining quality. Batch compress multiple images at once.
-            </p>
+        <a href="tools/image-to-pdf.html" class="tool-card-compact">
+          <div class="tool-header">
+            <div class="tool-icon">🖼️</div>
+            <div class="tool-info">
+              <div class="tool-name">Image to PDF</div>
+              <div class="tool-desc">Convert multiple images into a single PDF document</div>
+              <span class="tool-status">Ready</span>
+            </div>
           </div>
         </a>
 
-        <!-- Image Converter -->
-        <a href="tools/image-converter.html" class="tool-card fade-in">
-          <div class="tool-icon">🔄</div>
-          <div>
-            <h3 class="tool-title">Image Converter</h3>
-            <p class="tool-description">
-              Convert images between different formats: PNG, JPEG, WEBP, and more.
-            </p>
+        <a href="tools/image-compressor.html" class="tool-card-compact">
+          <div class="tool-header">
+            <div class="tool-icon">🗜️</div>
+            <div class="tool-info">
+              <div class="tool-name">Image Compressor</div>
+              <div class="tool-desc">Reduce image file sizes while maintaining quality</div>
+              <span class="tool-status">Ready</span>
+            </div>
           </div>
         </a>
 
-        <!-- PDF Merge -->
-        <a href="tools/pdf-merge.html" class="tool-card fade-in">
-          <div class="tool-icon">📄</div>
-          <div>
-            <h3 class="tool-title">Merge PDF</h3>
-            <p class="tool-description">
-              Combine multiple PDF files into a single document. Drag to reorder pages.
-            </p>
+        <a href="tools/image-converter.html" class="tool-card-compact">
+          <div class="tool-header">
+            <div class="tool-icon">🔄</div>
+            <div class="tool-info">
+              <div class="tool-name">Image Converter</div>
+              <div class="tool-desc">Convert between PNG, JPEG, WEBP, BMP formats</div>
+              <span class="tool-status">Ready</span>
+            </div>
           </div>
         </a>
 
-        <!-- PDF Compressor -->
-        <a href="tools/pdf-compress.html" class="tool-card fade-in">
-          <div class="tool-icon">📦</div>
-          <div>
-            <h3 class="tool-title">Compress PDF</h3>
-            <p class="tool-description">
-              Reduce PDF file size without losing quality. Perfect for email attachments.
-            </p>
+        <a href="tools/pdf-merge.html" class="tool-card-compact">
+          <div class="tool-header">
+            <div class="tool-icon">📄</div>
+            <div class="tool-info">
+              <div class="tool-name">PDF Merge</div>
+              <div class="tool-desc">Combine multiple PDF files into one document</div>
+              <span class="tool-status">Ready</span>
+            </div>
           </div>
         </a>
 
-        <!-- Background Remover -->
-        <a href="tools/bg-remove.html" class="tool-card fade-in">
-          <div class="tool-icon">✂️</div>
-          <div>
-            <h3 class="tool-title">Background Remover</h3>
-            <p class="tool-description">
-              Remove backgrounds from images automatically. Get transparent PNG output.
-            </p>
+        <a href="tools/pdf-compress.html" class="tool-card-compact">
+          <div class="tool-header">
+            <div class="tool-icon">📦</div>
+            <div class="tool-info">
+              <div class="tool-name">PDF Compress</div>
+              <div class="tool-desc">Reduce PDF file size without losing quality</div>
+              <span class="tool-status">Ready</span>
+            </div>
           </div>
-          <span class="tool-badge">New</span>
         </a>
-      </div>
-    </section>
 
-    <!-- Features Section -->
-    <section id="features" class="container mt-xl">
-      <h2 class="text-center mb-lg">Why Choose FileForge?</h2>
+        <a href="tools/bg-remove.html" class="tool-card-compact">
+          <div class="tool-header">
+            <div class="tool-icon">✂️</div>
+            <div class="tool-info">
+              <div class="tool-name">Background Remover</div>
+              <div class="tool-desc">Remove backgrounds from images automatically</div>
+              <span class="tool-status">Ready</span>
+            </div>
+          </div>
+        </a>
 
-      <div class="grid grid-3">
-        <div class="card">
-          <h4 class="card-title">🔒 Privacy First</h4>
-          <div class="card-content">
-            All processing happens in your browser. Your files never leave your device and are never uploaded to any
-            server.
+        <!-- Coming Soon -->
+        <div class="tool-card-compact" style="opacity: 0.6; cursor: not-allowed;">
+          <div class="tool-header">
+            <div class="tool-icon">🖼️</div>
+            <div class="tool-info">
+              <div class="tool-name">PDF to Images</div>
+              <div class="tool-desc">Extract pages from PDF as PNG/JPG images</div>
+              <span class="tool-status coming-soon">Coming Soon</span>
+            </div>
           </div>
         </div>
 
-        <div class="card">
-          <h4 class="card-title">⚡ Lightning Fast</h4>
-          <div class="card-content">
-            No upload or download delays. Process files instantly with the power of modern web technologies.
+        <div class="tool-card-compact" style="opacity: 0.6; cursor: not-allowed;">
+          <div class="tool-header">
+            <div class="tool-icon">✂️</div>
+            <div class="tool-info">
+              <div class="tool-name">PDF Split</div>
+              <div class="tool-desc">Split PDF into multiple files or extract pages</div>
+              <span class="tool-status coming-soon">Coming Soon</span>
+            </div>
           </div>
         </div>
 
-        <div class="card">
-          <h4 class="card-title">💰 Completely Free</h4>
-          <div class="card-content">
-            No subscriptions, no hidden fees, no limits. All tools are 100% free to use, forever.
-          </div>
-        </div>
-
-        <div class="card">
-          <h4 class="card-title">📱 Works Anywhere</h4>
-          <div class="card-content">
-            Fully responsive design works on desktop, tablet, and mobile. Process files on any device.
-          </div>
-        </div>
-
-        <div class="card">
-          <h4 class="card-title">🌐 Works Offline</h4>
-          <div class="card-content">
-            Once loaded, most tools work without internet. Perfect for working on the go.
-          </div>
-        </div>
-
-        <div class="card">
-          <h4 class="card-title">🎨 Modern Design</h4>
-          <div class="card-content">
-            Clean, intuitive interface with dark mode support. Beautiful and easy to use.
+        <div class="tool-card-compact" style="opacity: 0.6; cursor: not-allowed;">
+          <div class="tool-header">
+            <div class="tool-icon">🔄</div>
+            <div class="tool-info">
+              <div class="tool-name">PDF Rotate</div>
+              <div class="tool-desc">Rotate pages in PDF documents (90°, 180°, 270°)</div>
+              <span class="tool-status coming-soon">Coming Soon</span>
+            </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- Privacy Notice -->
-    <section class="container mt-xl">
-      <div class="card">
-        <h3 class="card-title">🛡️ Your Privacy is Guaranteed</h3>
-        <div class="card-content">
-          <p>
-            FileForge is built with privacy as the #1 priority. All file processing happens entirely in your web browser
-            using JavaScript. This means:
-          </p>
-          <ul style="margin-top: var(--spacing-md); padding-left: var(--spacing-lg); color: var(--text-secondary);">
-            <li>Your files are <strong>never uploaded</strong> to any server</li>
-            <li>Your files <strong>never leave your device</strong></li>
-            <li>We <strong>don't collect</strong> any data about your files</li>
-            <li>We <strong>can't see</strong> what files you process</li>
-            <li>Everything is <strong>100% client-side</strong></li>
-          </ul>
-          <p style="margin-top: var(--spacing-md);">
-            You can verify this by opening your browser's Developer Tools (Network tab) and seeing that no files are
-            being uploaded. The source code is also <a href="https://github.com/aloksingh2005/FileForge"
-              target="_blank">open source on GitHub</a>.
-          </p>
-        </div>
+    <!-- Generators Tab -->
+    <div class="tab-content" data-category="generators">
+      <div class="category-header">
+        <h2 class="category-title">🔧 Generator Tools</h2>
+        <p class="category-description">Generate QR codes, passwords, invoices, and more</p>
       </div>
-    </section>
+
+      <div class="tools-grid">
+        <div class="tool-card-compact" style="opacity: 0.6; cursor: not-allowed;">
+          <div class="tool-header">
+            <div class="tool-icon">📱</div>
+            <div class="tool-info">
+              <div class="tool-name">QR Code Generator</div>
+              <div class="tool-desc">Create QR codes from text, URLs, or contact info</div>
+              <span class="tool-status coming-soon">Coming Soon</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- More generators will be added -->
+      </div>
+    </div>
+
+    <!-- Other tabs (placeholders) -->
+    <div class="tab-content" data-category="calculators">
+      <div class="category-header">
+        <h2 class="category-title">🔢 Calculators</h2>
+        <p class="category-description">Tools coming soon...</p>
+      </div>
+    </div>
+
+    <div class="tab-content" data-category="converters">
+      <div class="category-header">
+        <h2 class="category-title">🔄 Converters</h2>
+        <p class="category-description">Tools coming soon...</p>
+      </div>
+    </div>
+
+    <div class="tab-content" data-category="design">
+      <div class="category-header">
+        <h2 class="category-title">🎨 Design Tools</h2>
+        <p class="category-description">Tools coming soon...</p>
+      </div>
+    </div>
+
+    <div class="tab-content" data-category="media">
+      <div class="category-header">
+        <h2 class="category-title">📷 Media Tools</h2>
+        <p class="category-description">Tools coming soon...</p>
+      </div>
+    </div>
+
+    <div class="tab-content" data-category="productivity">
+      <div class="category-header">
+        <h2 class="category-title">⏱️ Productivity</h2>
+        <p class="category-description">Tools coming soon...</p>
+      </div>
+    </div>
+
+    <div class="tab-content" data-category="dev-tools">
+      <div class="category-header">
+        <h2 class="category-title">💻 Developer Tools</h2>
+        <p class="category-description">Tools coming soon...</p>
+      </div>
+    </div>
+
   </main>
 
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
       <div class="footer-content">
-        <ul class="footer-links">
-          <li><a href="https://github.com/aloksingh2005/FileForge" target="_blank">GitHub</a></li>
-          <li><a href="https://github.com/aloksingh2005/FileForge/issues" target="_blank">Report Issue</a></li>
-          <li><a href="#tools">Tools</a></li>
-        </ul>
-        <p>
-          Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a>
-        </p>
+        <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
         <p style="font-size: 0.875rem; margin-top: var(--spacing-sm);">
-          © 2024 FileForge. Open source under MIT License.
+          © 2024 FileForge Ultimate. 100% Client-Side • Privacy First • Open Source
         </p>
       </div>
     </div>
@@ -271,46 +313,15 @@
   <!-- Scripts -->
   <script src="js/utils.js"></script>
   <script src="js/ui.js"></script>
+  <script src="js/tabs.js"></script>
 
   <script>
-    // Animate tool cards on scroll
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -100px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry, index) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-          }, index * 50);
-          observer.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const toolCards = document.querySelectorAll('.tool-card');
-      toolCards.forEach(card => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-        card.style.transition = 'all 0.6s ease';
-        observer.observe(card);
-      });
-
-      // Register service worker for PWA
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(registration => {
-            console.log('Service Worker registered:', registration);
-          })
-          .catch(error => {
-            console.log('Service Worker registration failed:', error);
-          });
-      }
-    });
+    // Register service worker for PWA
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(reg => console.log('Service Worker registered'))
+        .catch(err => console.log('Service Worker registration failed'));
+    }
   </script>
 </body>
 
