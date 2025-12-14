@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Compress images online for free. Reduce file size while maintaining quality. Batch compress multiple images.">
+    <title>Image Compressor - FileForge</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/components.css">
+
+    <!-- Favicon -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔨</text></svg>">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">
+                    🔨 FileForge
+                </a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../index.html#tools">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🗜️ Image Compressor</h1>
+                <p class="hero-subtitle">
+                    Reduce image file sizes without losing quality. Perfect for web optimization and faster loading.
+                </p>
+            </div>
+
+            <!-- Upload Section -->
+            <div id="uploadSection">
+                <div class="file-upload-zone" id="uploadZone">
+                    <input type="file" id="fileInput" class="file-input-hidden" accept="image/*" multiple>
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">Click to select images or drag & drop</div>
+                    <div class="upload-hint">Supports JPG, PNG, WEBP • Multiple files allowed</div>
+                </div>
+            </div>
+
+            <!-- Preview Section -->
+            <div id="previewSection" style="display: none;">
+                <div class="flex justify-between items-center mb-md">
+                    <h3>Selected Images (<span id="imageCount">0</span>)</h3>
+                    <button class="btn btn-sm btn-secondary" id="clearBtn">Clear All</button>
+                </div>
+
+                <!-- Settings -->
+                <div class="settings-panel mb-lg">
+                    <h4>Compression Settings</h4>
+
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Quality</div>
+                            <div class="settings-description">Higher quality = larger file size</div>
+                        </div>
+                        <div class="flex items-center gap-md">
+                            <input type="range" id="qualitySlider" min="10" max="100" value="80" style="width: 200px;">
+                            <span id="qualityValue">80%</span>
+                        </div>
+                    </div>
+
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Output Format</div>
+                            <div class="settings-description">Format for compressed images</div>
+                        </div>
+                        <select id="formatSelect">
+                            <option value="original">Keep Original Format</option>
+                            <option value="jpeg">JPEG (best compression)</option>
+                            <option value="webp">WEBP (modern, smaller)</option>
+                            <option value="png">PNG (lossless)</option>
+                        </select>
+                    </div>
+
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Resize (Optional)</div>
+                            <div class="settings-description">Max width/height in pixels (0 = no resize)</div>
+                        </div>
+                        <div class="flex items-center gap-md">
+                            <input type="number" id="maxSizeInput" min="0" max="10000" value="0" placeholder="0"
+                                style="width: 100px; padding: 0.5rem; border: 1px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary);">
+                            <span>px</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="previewGrid" class="file-preview-grid"></div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-md mt-xl">
+                    <button class="btn btn-primary btn-block btn-lg" id="compressBtn">
+                        🗜️ Compress All Images
+                    </button>
+                </div>
+
+                <!-- Results Section -->
+                <div id="resultsSection" style="display: none; margin-top: var(--spacing-xl);">
+                    <div class="card">
+                        <h4 class="card-title">Compression Results</h4>
+                        <div class="card-content">
+                            <div id="resultsStats" style="margin-bottom: var(--spacing-md);"></div>
+                            <button class="btn btn-success btn-block" id="downloadAllBtn">
+                                📥 Download All Compressed Images
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instructions -->
+            <div class="card mt-xl">
+                <h4 class="card-title">How to Use</h4>
+                <div class="card-content">
+                    <ol style="padding-left: var(--spacing-lg); color: var(--text-secondary);">
+                        <li>Upload one or more images</li>
+                        <li>Adjust compression quality (80% recommended for good balance)</li>
+                        <li>Optionally change output format or resize images</li>
+                        <li>Click "Compress All Images"</li>
+                        <li>Download compressed images individually or all as ZIP</li>
+                    </ol>
+                    <p style="margin-top: var(--spacing-md);">
+                        <strong>Tip:</strong> WEBP format typically gives the smallest file sizes with great quality.
+                        JPEG is widely compatible. PNG is best for images with transparency.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>
+                    Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/ui.js"></script>
+    <script src="../js/image-compressor.js"></script>
+</body>
+
+</html>
