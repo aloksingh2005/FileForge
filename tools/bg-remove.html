@@ -45,51 +45,96 @@
             <div class="text-center mt-xl mb-lg">
                 <h1>✂️ Background Remover</h1>
                 <p class="hero-subtitle">
-                    Remove backgrounds from images automatically using AI.
+                    Remove backgrounds from images automatically using AI-powered technology.
                 </p>
             </div>
 
-            <!-- Coming Soon Notice -->
-            <div class="card">
-                <h3 class="card-title">🚧 Coming Soon!</h3>
+            <!-- API Key Notice -->
+            <div class="card mb-lg" style="border-left: 4px solid var(--info);">
+                <h4 class="card-title">🔑 API Key Required</h4>
                 <div class="card-content">
-                    <p>This tool is currently under development. Soon you'll be able to:</p>
-                    <ul
-                        style="padding-left: var(--spacing-lg); color: var(--text-secondary); margin-top: var(--spacing-md);">
-                        <li>Upload photos with any background</li>
-                        <li>Automatic AI-powered background removal</li>
-                        <li>Before/after comparison slider</li>
-                        <li>Download transparent PNG images</li>
-                        <li>Batch processing for multiple images</li>
-                        <li>Choose between different removal methods</li>
-                    </ul>
-                    <p style="margin-top: var(--spacing-lg);">
-                        In the meantime, check out our other tools:
-                    </p>
-                    <div class="flex gap-md justify-center mt-md" style="flex-wrap: wrap;">
-                        <a href="image-to-pdf.html" class="btn btn-primary">Image to PDF</a>
-                        <a href="image-compressor.html" class="btn btn-secondary">Image Compressor</a>
-                        <a href="image-converter.html" class="btn btn-secondary">Image Converter</a>
+                    <p>This tool uses Remove.bg API for high-quality background removal. You need a free API key:</p>
+                    <ol
+                        style="padding-left: var(--spacing-lg); color: var(--text-secondary); margin: var(--spacing-md) 0;">
+                        <li>Visit <a href="https://remove.bg/api" target="_blank">remove.bg/api</a></li>
+                        <li>Sign up for free (50 images/month)</li>
+                        <li>Copy your API key</li>
+                        <li>Paste it below</li>
+                    </ol>
+                    <div style="display: flex; gap: var(--spacing-sm); margin-top: var(--spacing-md);">
+                        <input type="text" id="apiKeyInput" placeholder="Enter your Remove.bg API key"
+                            style="flex: 1; padding: 0.75rem; border: 1px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-family: monospace;">
+                        <button class="btn btn-primary" id="saveApiKeyBtn">Save Key</button>
+                    </div>
+                    <div id="apiKeyStatus" style="margin-top: var(--spacing-sm); font-size: 0.875rem;"></div>
+                </div>
+            </div>
+
+            <!-- Upload Section -->
+            <div id="uploadSection">
+                <div class="file-upload-zone" id="uploadZone">
+                    <input type="file" id="fileInput" class="file-input-hidden" accept="image/*">
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">Click to select image or drag & drop</div>
+                    <div class="upload-hint">Supports JPG, PNG, WEBP • Single image</div>
+                </div>
+            </div>
+
+            <!-- Preview Section -->
+            <div id="previewSection" style="display: none;">
+                <div class="card mb-lg">
+                    <h4 class="card-title">Original Image</h4>
+                    <div class="card-content">
+                        <img id="originalImage"
+                            style="width: 100%; border-radius: var(--radius-md); margin-bottom: var(--spacing-md);">
+                        <div id="originalInfo" style="font-size: 0.875rem; color: var(--text-secondary);"></div>
+                        <button class="btn btn-sm btn-secondary btn-block mt-md" id="clearBtn">Select Different
+                            Image</button>
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <button class="btn btn-primary btn-block btn-lg" id="removeBtn">
+                    ✂️ Remove Background
+                </button>
+
+                <!-- Results Section -->
+                <div id="resultsSection" style="display: none; margin-top: var(--spacing-xl);">
+                    <div class="card">
+                        <h4 class="card-title">Result (Background Removed)</h4>
+                        <div class="card-content">
+                            <div style="background: 
+                repeating-conic-gradient(#f0f0f0 0% 25%, transparent 0% 50%) 
+                50% / 20px 20px;
+                border-radius: var(--radius-md);
+                padding: var(--spacing-md);
+                margin-bottom: var(--spacing-md);">
+                                <img id="resultImage" style="width: 100%; border-radius: var(--radius-md);">
+                            </div>
+                            <button class="btn btn-success btn-block" id="downloadBtn">
+                                📥 Download PNG with Transparency
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Planned Features -->
-            <div class="card mt-lg">
-                <h4 class="card-title">Planned Features</h4>
+            <!-- Instructions -->
+            <div class="card mt-xl">
+                <h4 class="card-title">How to Use</h4>
                 <div class="card-content">
-                    <ul style="padding-left: var(--spacing-lg); color: var(--text-secondary);">
-                        <li>✅ AI-powered background removal</li>
-                        <li>✅ High-quality edge detection</li>
-                        <li>✅ Before/after preview</li>
-                        <li>✅ Transparent PNG output</li>
-                        <li>✅ Batch processing</li>
-                        <li>✅ Works with people, products, and objects</li>
-                        <li>✅ Option for API-based or client-side processing</li>
-                    </ul>
+                    <ol style="padding-left: var(--spacing-lg); color: var(--text-secondary);">
+                        <li>Get a free API key from <a href="https://remove.bg/api" target="_blank">remove.bg</a> (50
+                            images/month free)</li>
+                        <li>Enter and save your API key above</li>
+                        <li>Upload a photo (works best with people, products, animals)</li>
+                        <li>Click "Remove Background"</li>
+                        <li>Download the result as transparent PNG</li>
+                    </ol>
                     <p style="margin-top: var(--spacing-md);">
-                        <strong>Note:</strong> Background removal will use either Remove.bg API (requires API key, free
-                        tier available) or client-side ML model (TensorFlow.js, slower but works offline).
+                        <strong>Privacy:</strong> Images are sent to Remove.bg API for processing. For completely
+                        offline processing, we'd need to add a large ML model (~100MB), which would slow down the page
+                        significantly.
                     </p>
                 </div>
             </div>
@@ -110,6 +155,7 @@
     <!-- Scripts -->
     <script src="../js/utils.js"></script>
     <script src="../js/ui.js"></script>
+    <script src="../js/bg-remove.js"></script>
 </body>
 
 </html>

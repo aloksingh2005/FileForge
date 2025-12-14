@@ -49,44 +49,103 @@
                 </p>
             </div>
 
-            <!-- Coming Soon Notice -->
-            <div class="card">
-                <h3 class="card-title">🚧 Coming Soon!</h3>
-                <div class="card-content">
-                    <p>This tool is currently under development. Soon you'll be able to:</p>
-                    <ul
-                        style="padding-left: var(--spacing-lg); color: var(--text-secondary); margin-top: var(--spacing-md);">
-                        <li>Upload PDF files of any size</li>
-                        <li>Choose compression level (low, medium, high)</li>
-                        <li>Compress images within PDFs</li>
-                        <li>Remove metadata and unused elements</li>
-                        <li>See before/after file size comparison</li>
-                        <li>100% client-side processing (privacy guaranteed)</li>
-                    </ul>
-                    <p style="margin-top: var(--spacing-lg);">
-                        In the meantime, check out our other tools:
-                    </p>
-                    <div class="flex gap-md justify-center mt-md" style="flex-wrap: wrap;">
-                        <a href="image-to-pdf.html" class="btn btn-primary">Image to PDF</a>
-                        <a href="image-compressor.html" class="btn btn-secondary">Image Compressor</a>
-                        <a href="image-converter.html" class="btn btn-secondary">Image Converter</a>
+            <!-- Upload Section -->
+            <div id="uploadSection">
+                <div class="file-upload-zone" id="uploadZone">
+                    <input type="file" id="fileInput" class="file-input-hidden" accept=".pdf,application/pdf">
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">Click to select PDF or drag & drop</div>
+                    <div class="upload-hint">PDF files only • Single file</div>
+                </div>
+            </div>
+
+            <!-- Preview Section -->
+            <div id="previewSection" style="display: none;">
+                <div class="card mb-lg">
+                    <h4 class="card-title">Selected PDF</h4>
+                    <div class="card-content">
+                        <div id="pdfInfo"
+                            style="display: flex; align-items: center; gap: var(--spacing-md); margin-bottom: var(--spacing-md);">
+                            <div style="font-size: 2rem;">📄</div>
+                            <div style="flex: 1;">
+                                <div id="fileName" style="font-weight: 600; margin-bottom: 0.25rem;"></div>
+                                <div id="fileDetails" style="font-size: 0.875rem; color: var(--text-secondary);"></div>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-secondary btn-block" id="clearBtn">Select Different PDF</button>
+                    </div>
+                </div>
+
+                <!-- Compression Settings -->
+                <div class="settings-panel mb-lg">
+                    <h4>Compression Level</h4>
+
+                    <div class="settings-row">
+                        <label>
+                            <input type="radio" name="compression" value="low" style="margin-right: 0.5rem;">
+                            <div>
+                                <div class="settings-label">Low Compression</div>
+                                <div class="settings-description">Minor size reduction, best quality</div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="settings-row">
+                        <label>
+                            <input type="radio" name="compression" value="medium" checked style="margin-right: 0.5rem;">
+                            <div>
+                                <div class="settings-label">Medium Compression</div>
+                                <div class="settings-description">Balanced size and quality (recommended)</div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="settings-row">
+                        <label>
+                            <input type="radio" name="compression" value="high" style="margin-right: 0.5rem;">
+                            <div>
+                                <div class="settings-label">High Compression</div>
+                                <div class="settings-description">Maximum size reduction, may affect quality</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <button class="btn btn-primary btn-block btn-lg" id="compressBtn">
+                    📦 Compress PDF
+                </button>
+
+                <!-- Results Section -->
+                <div id="resultsSection" style="display: none; margin-top: var(--spacing-xl);">
+                    <div class="card">
+                        <h4 class="card-title">Compression Results</h4>
+                        <div class="card-content">
+                            <div id="resultsStats" style="margin-bottom: var(--spacing-md);"></div>
+                            <button class="btn btn-success btn-block" id="downloadBtn">
+                                📥 Download Compressed PDF
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Planned Features -->
-            <div class="card mt-lg">
-                <h4 class="card-title">Planned Features</h4>
+            <!-- Instructions -->
+            <div class="card mt-xl">
+                <h4 class="card-title">How to Use</h4>
                 <div class="card-content">
-                    <ul style="padding-left: var(--spacing-lg); color: var(--text-secondary);">
-                        <li>✅ Multiple compression levels</li>
-                        <li>✅ Image compression within PDFs</li>
-                        <li>✅ Font subsetting</li>
-                        <li>✅ Metadata removal</li>
-                        <li>✅ Before/after size comparison</li>
-                        <li>✅ Batch compression</li>
-                        <li>✅ 100% client-side (your files never upload)</li>
-                    </ul>
+                    <ol style="padding-left: var(--spacing-lg); color: var(--text-secondary);">
+                        <li>Upload a PDF file</li>
+                        <li>Choose compression level (medium recommended)</li>
+                        <li>Click "Compress PDF"</li>
+                        <li>Wait for compression to complete</li>
+                        <li>Download the compressed PDF</li>
+                    </ol>
+                    <p style="margin-top: var(--spacing-md);">
+                        <strong>Note:</strong> PDF compression works by optimizing images and removing redundant data.
+                        Results may vary depending on the PDF content. PDFs with many images will compress better than
+                        text-only PDFs.
+                    </p>
                 </div>
             </div>
         </section>
@@ -104,8 +163,10 @@
     </footer>
 
     <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
     <script src="../js/utils.js"></script>
     <script src="../js/ui.js"></script>
+    <script src="../js/pdf-compress.js"></script>
 </body>
 
 </html>

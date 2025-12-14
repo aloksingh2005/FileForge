@@ -49,43 +49,48 @@
                 </p>
             </div>
 
-            <!-- Coming Soon Notice -->
-            <div class="card">
-                <h3 class="card-title">🚧 Coming Soon!</h3>
-                <div class="card-content">
-                    <p>This tool is currently under development. Soon you'll be able to:</p>
-                    <ul
-                        style="padding-left: var(--spacing-lg); color: var(--text-secondary); margin-top: var(--spacing-md);">
-                        <li>Upload multiple PDF files</li>
-                        <li>Drag to reorder PDFs</li>
-                        <li>Select specific page ranges</li>
-                        <li>Merge into a single PDF document</li>
-                        <li>100% client-side processing (privacy guaranteed)</li>
-                    </ul>
-                    <p style="margin-top: var(--spacing-lg);">
-                        In the meantime, check out our other tools:
-                    </p>
-                    <div class="flex gap-md justify-center mt-md" style="flex-wrap: wrap;">
-                        <a href="image-to-pdf.html" class="btn btn-primary">Image to PDF</a>
-                        <a href="image-compressor.html" class="btn btn-secondary">Image Compressor</a>
-                        <a href="image-converter.html" class="btn btn-secondary">Image Converter</a>
-                    </div>
+            <!-- Upload Section -->
+            <div id="uploadSection">
+                <div class="file-upload-zone" id="uploadZone">
+                    <input type="file" id="fileInput" class="file-input-hidden" accept=".pdf,application/pdf" multiple>
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">Click to select PDFs or drag & drop</div>
+                    <div class="upload-hint">PDF files only • Multiple files required</div>
                 </div>
             </div>
 
-            <!-- Planned Features -->
-            <div class="card mt-lg">
-                <h4 class="card-title">Planned Features</h4>
+            <!-- Preview Section -->
+            <div id="previewSection" style="display: none;">
+                <div class="flex justify-between items-center mb-md">
+                    <h3>Selected PDFs (<span id="pdfCount">0</span>)</h3>
+                    <button class="btn btn-sm btn-secondary" id="clearBtn">Clear All</button>
+                </div>
+
+                <div id="previewList" style="display: flex; flex-direction: column; gap: var(--spacing-md);"></div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-md mt-xl">
+                    <button class="btn btn-primary btn-block btn-lg" id="mergeBtn">
+                        📄 Merge PDFs
+                    </button>
+                </div>
+            </div>
+
+            <!-- Instructions -->
+            <div class="card mt-xl">
+                <h4 class="card-title">How to Use</h4>
                 <div class="card-content">
-                    <ul style="padding-left: var(--spacing-lg); color: var(--text-secondary);">
-                        <li>✅ Merge unlimited PDF files</li>
-                        <li>✅ Drag and drop interface</li>
-                        <li>✅ Reorder PDFs before merging</li>
-                        <li>✅ Select specific pages from each PDF</li>
-                        <li>✅ Preview PDF thumbnails</li>
-                        <li>✅ No file size limits</li>
-                        <li>✅ 100% client-side (your files never upload)</li>
-                    </ul>
+                    <ol style="padding-left: var(--spacing-lg); color: var(--text-secondary);">
+                        <li>Upload 2 or more PDF files</li>
+                        <li>PDFs will appear in a list below</li>
+                        <li>Drag PDFs to reorder them (first to last)</li>
+                        <li>Click "Merge PDFs" to combine them</li>
+                        <li>The merged PDF will download automatically</li>
+                    </ol>
+                    <p style="margin-top: var(--spacing-md);">
+                        <strong>Privacy:</strong> All merging happens in your browser. Your PDFs never leave your
+                        device.
+                    </p>
                 </div>
             </div>
         </section>
@@ -103,8 +108,10 @@
     </footer>
 
     <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
     <script src="../js/utils.js"></script>
     <script src="../js/ui.js"></script>
+    <script src="../js/pdf-merge.js"></script>
 </body>
 
 </html>
