@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Convert multiple images to PDF online. Free, fast, and secure. No uploads required.">
+    <title>Image to PDF Converter - FileForge</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/components.css">
+
+    <!-- Favicon -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔨</text></svg>">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">
+                    🔨 FileForge
+                </a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../index.html#tools">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🖼️ Image to PDF Converter</h1>
+                <p class="hero-subtitle">
+                    Convert multiple images into a single PDF document. Perfect for creating portfolios, reports, or
+                    e-books.
+                </p>
+            </div>
+
+            <!-- Upload Section -->
+            <div id="uploadSection">
+                <div class="file-upload-zone" id="uploadZone">
+                    <input type="file" id="fileInput" class="file-input-hidden" accept="image/*" multiple>
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">Click to select images or drag & drop</div>
+                    <div class="upload-hint">Supports JPG, PNG, WEBP, GIF • Multiple files allowed</div>
+                </div>
+            </div>
+
+            <!-- Preview Section -->
+            <div id="previewSection" style="display: none;">
+                <div class="flex justify-between items-center mb-md">
+                    <h3>Selected Images (<span id="imageCount">0</span>)</h3>
+                    <button class="btn btn-sm btn-secondary" id="clearBtn">Clear All</button>
+                </div>
+
+                <div id="previewGrid" class="file-preview-grid"></div>
+
+                <!-- Settings -->
+                <div class="settings-panel mt-lg">
+                    <h4>PDF Settings</h4>
+
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Page Size</div>
+                            <div class="settings-description">Choose the output PDF page size</div>
+                        </div>
+                        <select id="pageSizeSelect">
+                            <option value="a4">A4 (210 × 297 mm)</option>
+                            <option value="letter">Letter (216 × 279 mm)</option>
+                            <option value="a3">A3 (297 × 420 mm)</option>
+                            <option value="a5">A5 (148 × 210 mm)</option>
+                        </select>
+                    </div>
+
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Orientation</div>
+                            <div class="settings-description">Page orientation for the PDF</div>
+                        </div>
+                        <select id="orientationSelect">
+                            <option value="portrait">Portrait</option>
+                            <option value="landscape">Landscape</option>
+                        </select>
+                    </div>
+
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Image Fit</div>
+                            <div class="settings-description">How images should fit on the page</div>
+                        </div>
+                        <select id="fitSelect">
+                            <option value="contain">Fit to page (maintain aspect ratio)</option>
+                            <option value="cover">Fill page (may crop)</option>
+                            <option value="stretch">Stretch to fill</option>
+                        </select>
+                    </div>
+
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Margin</div>
+                            <div class="settings-description">Space around images (in mm)</div>
+                        </div>
+                        <div class="flex items-center gap-md">
+                            <input type="range" id="marginSlider" min="0" max="50" value="10" style="width: 150px;">
+                            <span id="marginValue">10mm</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-md mt-xl">
+                    <button class="btn btn-primary btn-block btn-lg" id="convertBtn">
+                        📄 Convert to PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- Instructions -->
+            <div class="card mt-xl">
+                <h4 class="card-title">How to Use</h4>
+                <div class="card-content">
+                    <ol style="padding-left: var(--spacing-lg); color: var(--text-secondary);">
+                        <li>Click the upload area or drag & drop your images</li>
+                        <li>Images will appear in a grid preview below</li>
+                        <li>Drag images to reorder them (first to last page)</li>
+                        <li>Adjust PDF settings like page size and orientation</li>
+                        <li>Click "Convert to PDF" to generate your PDF</li>
+                        <li>The PDF will download automatically</li>
+                    </ol>
+                    <p style="margin-top: var(--spacing-md);">
+                        <strong>Privacy:</strong> All conversion happens in your browser. Your images never leave your
+                        device.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>
+                    Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/ui.js"></script>
+    <script src="../js/image-to-pdf.js"></script>
+</body>
+
+</html>
