@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Converter - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🎨 Color Converter</h1>
+                <p class="hero-subtitle">Convert between HEX, RGB, and HSL color formats</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Pick or Enter a Color</h4>
+                <div class="card-content">
+                    <div
+                        style="display: flex; gap: var(--spacing-md); align-items: center; margin-bottom: var(--spacing-lg);">
+                        <input type="color" id="colorPicker" value="#6366f1"
+                            style="width: 100px; height: 100px; border: none; border-radius: var(--radius-md); cursor: pointer;">
+                        <div style="flex: 1;">
+                            <input type="text" id="hexInput" placeholder="#6366f1" value="#6366f1"
+                                style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-family: monospace; font-size: 1.1rem;">
+                        </div>
+                    </div>
+
+                    <div id="preview"
+                        style="width: 100%; height: 100px; border-radius: var(--radius-md); background: #6366f1; margin-bottom: var(--spacing-lg);">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-md">
+                <h4 class="card-title">HEX</h4>
+                <div class="card-content">
+                    <div style="display: flex; gap: var(--spacing-sm);">
+                        <input type="text" id="hexResult" readonly value="#6366f1"
+                            style="flex: 1; padding: var(--spacing-md); background: var(--bg-secondary); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); font-family: monospace; color: var(--text-primary);">
+                        <button class="btn btn-sm btn-secondary" onclick="copyValue('hexResult')">📋</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-md">
+                <h4 class="card-title">RGB</h4>
+                <div class="card-content">
+                    <div style="display: flex; gap: var(--spacing-sm);">
+                        <input type="text" id="rgbResult" readonly value="rgb(99, 102, 241)"
+                            style="flex: 1; padding: var(--spacing-md); background: var(--bg-secondary); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); font-family: monospace; color: var(--text-primary);">
+                        <button class="btn btn-sm btn-secondary" onclick="copyValue('rgbResult')">📋</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">HSL</h4>
+                <div class="card-content">
+                    <div style="display: flex; gap: var(--spacing-sm);">
+                        <input type="text" id="hslResult" readonly value="hsl(239, 84%, 67%)"
+                            style="flex: 1; padding: var(--spacing-md); background: var(--bg-secondary); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); font-family: monospace; color: var(--text-primary);">
+                        <button class="btn btn-sm btn-secondary" onclick="copyValue('hslResult')">📋</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/utils.js"></script>
+    <script src="../js/ui.js"></script>
+    <script src="../js/converters/color.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Counter - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>📊 Character Counter</h1>
+                <p class="hero-subtitle">Count characters, words, sentences, and more</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Enter Text</h4>
+                <div class="card-content">
+                    <textarea id="inputText" rows="12" placeholder="Start typing or paste your text here..."
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem; line-height: 1.6; resize: vertical;"></textarea>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">Statistics</h4>
+                <div class="card-content">
+                    <div
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--spacing-md);">
+                        <div
+                            style="text-align: center; padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md);">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--accent-primary);"
+                                id="charCount">0</div>
+                            <div style="color: var(--text-secondary); font-size: 0.875rem;">Characters</div>
+                        </div>
+                        <div
+                            style="text-align: center; padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md);">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--accent-primary);"
+                                id="charNoSpaceCount">0</div>
+                            <div style="color: var(--text-secondary); font-size: 0.875rem;">Without Spaces</div>
+                        </div>
+                        <div
+                            style="text-align: center; padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md);">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--accent-primary);"
+                                id="wordCount">0</div>
+                            <div style="color: var(--text-secondary); font-size: 0.875rem;">Words</div>
+                        </div>
+                        <div
+                            style="text-align: center; padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md);">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--accent-primary);"
+                                id="sentenceCount">0</div>
+                            <div style="color: var(--text-secondary); font-size: 0.875rem;">Sentences</div>
+                        </div>
+                        <div
+                            style="text-align: center; padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md);">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--accent-primary);"
+                                id="paragraphCount">0</div>
+                            <div style="color: var(--text-secondary); font-size: 0.875rem;">Paragraphs</div>
+                        </div>
+                        <div
+                            style="text-align: center; padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md);">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--accent-primary);"
+                                id="lineCount">0</div>
+                            <div style="color: var(--text-secondary); font-size: 0.875rem;">Lines</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/utils.js"></script>
+    <script src="../js/ui.js"></script>
+    <script>
+        const inputText = document.getElementById('inputText');
+
+        inputText.addEventListener('input', updateCounts);
+
+        function updateCounts() {
+            const text = inputText.value;
+
+            // Characters
+            document.getElementById('charCount').textContent = text.length;
+
+            // Characters without spaces
+            document.getElementById('charNoSpaceCount').textContent = text.replace(/\s/g, '').length;
+
+            // Words
+            const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+            document.getElementById('wordCount').textContent = text.trim() ? words.length : 0;
+
+            // Sentences
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+            document.getElementById('sentenceCount').textContent = sentences.length;
+
+            // Paragraphs
+            const paragraphs = text.split(/\n\n+/).filter(p => p.trim().length > 0);
+            document.getElementById('paragraphCount').textContent = paragraphs.length;
+
+            // Lines
+            const lines = text.split(/\n/).filter(l => l.length > 0);
+            document.getElementById('lineCount').textContent = text ? lines.length : 0;
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Encoder/Decoder - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🔗 URL Encoder/Decoder</h1>
+                <p class="hero-subtitle">Encode or decode URLs and query strings</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Input</h4>
+                <div class="card-content">
+                    <textarea id="inputText" rows="6" placeholder="Enter URL or text..."
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-family: monospace; font-size: 0.9rem; resize: vertical;"></textarea>
+
+                    <div style="display: flex; gap: var(--spacing-sm); margin-top: var(--spacing-md);">
+                        <button class="btn btn-primary" onclick="encodeURL()">🔒 Encode URL</button>
+                        <button class="btn btn-secondary" onclick="decodeURL()">🔓 Decode URL</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="resultSection" style="display: none;">
+                <div class="card">
+                    <h4 class="card-title">Result</h4>
+                    <div class="card-content">
+                        <textarea id="outputText" readonly rows="6"
+                            style="width: 100%; padding: var(--spacing-md); background: var(--bg-secondary); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); font-family: monospace; color: var(--text-primary); font-size: 0.9rem; resize: vertical;"></textarea>
+                        <button class="btn btn-success btn-block mt-md" onclick="copyResult()">📋 Copy Result</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/utils.js"></script>
+    <script src="../js/ui.js"></script>
+    <script>
+        function encodeURL() {
+            const input = document.getElementById('inputText').value;
+            if (!input) {
+                showToast('Please enter text to encode', 'warning');
+                return;
+            }
+            try {
+                document.getElementById('outputText').value = encodeURIComponent(input);
+                document.getElementById('resultSection').style.display = 'block';
+                showToast('URL encoded!', 'success');
+            } catch (error) {
+                showToast('Error encoding: ' + error.message, 'error');
+            }
+        }
+
+        function decodeURL() {
+            const input = document.getElementById('inputText').value;
+            if (!input) {
+                showToast('Please enter URL to decode', 'warning');
+                return;
+            }
+            try {
+                document.getElementById('outputText').value = decodeURIComponent(input);
+                document.getElementById('resultSection').style.display = 'block';
+                showToast('URL decoded!', 'success');
+            } catch (error) {
+                showToast('Invalid URL encoding', 'error');
+            }
+        }
+
+        function copyResult() {
+            const output = document.getElementById('outputText');
+            output.select();
+            document.execCommand('copy');
+            showToast('Copied!', 'success');
+        }
+    </script>
+</body>
+
+</html>

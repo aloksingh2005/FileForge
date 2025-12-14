@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tip Calculator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>💵 Tip Calculator</h1>
+                <p class="hero-subtitle">Calculate tips and split bills easily</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Bill Details</h4>
+                <div class="card-content">
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Bill Amount</div>
+                        </div>
+                        <input type="number" id="billAmount" placeholder="100.00" step="0.01"
+                            style="width: 150px; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Tip Percentage</div>
+                            <div class="settings-description" id="tipPercentText">15%</div>
+                        </div>
+                        <input type="range" id="tipPercent" min="0" max="30" value="15" step="1" style="width: 200px;">
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Number of People</div>
+                        </div>
+                        <input type="number" id="numPeople" value="1" min="1"
+                            style="width: 100px; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">Summary</h4>
+                <div class="card-content">
+                    <div
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-lg);">
+                        <div
+                            style="text-align: center; padding: var(--spacing-lg); background: var(--bg-tertiary); border-radius: var(--radius-md);">
+                            <div
+                                style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: var(--spacing-sm);">
+                                Tip Amount</div>
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--accent-primary);"
+                                id="tipAmount">$0.00</div>
+                        </div>
+                        <div
+                            style="text-align: center; padding: var(--spacing-lg); background: var(--bg-tertiary); border-radius: var(--radius-md);">
+                            <div
+                                style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: var(--spacing-sm);">
+                                Total Amount</div>
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--success);" id="totalAmount">
+                                $0.00</div>
+                        </div>
+                        <div
+                            style="text-align: center; padding: var(--spacing-lg); background: var(--bg-tertiary); border-radius: var(--radius-md);">
+                            <div
+                                style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: var(--spacing-sm);">
+                                Per Person</div>
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--warning);" id="perPerson">$0.00
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/utils.js"></script>
+    <script src="../js/ui.js"></script>
+    <script>
+        const billAmount = document.getElementById('billAmount');
+        const tipPercent = document.getElementById('tipPercent');
+        const numPeople = document.getElementById('numPeople');
+        const tipPercentText = document.getElementById('tipPercentText');
+
+        billAmount.addEventListener('input', calculate);
+        tipPercent.addEventListener('input', () => {
+            tipPercentText.textContent = tipPercent.value + '%';
+            calculate();
+        });
+        numPeople.addEventListener('input', calculate);
+
+        function calculate() {
+            const bill = parseFloat(billAmount.value) || 0;
+            const tip = parseFloat(tipPercent.value) || 0;
+            const people = parseInt(numPeople.value) || 1;
+
+            const tipAmount = (bill * tip) / 100;
+            const total = bill + tipAmount;
+            const perPerson = total / people;
+
+            document.getElementById('tipAmount').textContent = '$' + tipAmount.toFixed(2);
+            document.getElementById('totalAmount').textContent = '$' + total.toFixed(2);
+            document.getElementById('perPerson').textContent = '$' + perPerson.toFixed(2);
+        }
+
+        calculate();
+    </script>
+</body>
+
+</html>
