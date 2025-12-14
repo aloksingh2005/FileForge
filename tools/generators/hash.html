@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hash Generator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🔐 Hash Generator</h1>
+                <p class="hero-subtitle">Generate MD5, SHA-1, SHA-256, SHA-512 hashes from text</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Enter Text</h4>
+                <div class="card-content">
+                    <textarea id="hashInput" rows="6" placeholder="Enter text to hash..."
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-family: monospace; font-size: 0.95rem; resize: vertical;"></textarea>
+
+                    <button class="btn btn-primary btn-block mt-lg" id="generateBtn">🔐 Generate Hashes</button>
+                </div>
+            </div>
+
+            <div id="resultSection" style="display: none;">
+                <div class="card mb-md">
+                    <h4 class="card-title">MD5</h4>
+                    <div class="card-content">
+                        <div style="display: flex; gap: var(--spacing-sm);">
+                            <input type="text" id="md5Result" readonly
+                                style="flex: 1; padding: var(--spacing-md); background: var(--bg-secondary); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); font-family: monospace; color: var(--text-primary);">
+                            <button class="btn btn-sm btn-secondary" onclick="copyHash('md5Result')">📋 Copy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-md">
+                    <h4 class="card-title">SHA-1</h4>
+                    <div class="card-content">
+                        <div style="display: flex; gap: var(--spacing-sm);">
+                            <input type="text" id="sha1Result" readonly
+                                style="flex: 1; padding: var(--spacing-md); background: var(--bg-secondary); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); font-family: monospace; color: var(--text-primary);">
+                            <button class="btn btn-sm btn-secondary" onclick="copyHash('sha1Result')">📋 Copy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-md">
+                    <h4 class="card-title">SHA-256</h4>
+                    <div class="card-content">
+                        <div style="display: flex; gap: var(--spacing-sm);">
+                            <input type="text" id="sha256Result" readonly
+                                style="flex: 1; padding: var(--spacing-md); background: var(--bg-secondary); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); font-family: monospace; color: var(--text-primary);">
+                            <button class="btn btn-sm btn-secondary" onclick="copyHash('sha256Result')">📋 Copy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h4 class="card-title">SHA-512</h4>
+                    <div class="card-content">
+                        <div style="display: flex; gap: var(--spacing-sm);">
+                            <input type="text" id="sha512Result" readonly
+                                style="flex: 1; padding: var(--spacing-md); background: var(--bg-secondary); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); font-family: monospace; color: var(--text-primary);">
+                            <button class="btn btn-sm btn-secondary" onclick="copyHash('sha512Result')">📋 Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/ui.js"></script>
+    <script src="../js/generators/hash.js"></script>
+</body>
+
+</html>
