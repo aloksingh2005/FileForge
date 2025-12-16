@@ -6,12 +6,35 @@ Process your files entirely in your browser - no uploads, no servers, no privacy
 
 ## Features
 
+### File Processing (6 Tools)
 🖼️ **Image → PDF** - Convert multiple images into a single PDF  
 🗜️ **Image Compressor** - Reduce image file sizes without quality loss  
 🔄 **Image Converter** - Convert between PNG, JPEG, WEBP formats  
 📄 **PDF Merge** - Combine multiple PDFs into one  
 📦 **PDF Compress** - Reduce PDF file sizes  
 ✂️ **Background Remover** - Remove backgrounds from images
+
+### Generators (5 Tools)
+📱 **QR Code** - Generate QR codes from text or URLs  
+🔑 **Password** - Create secure random passwords  
+🆔 **UUID** - Generate unique identifiers  
+📝 **Lorem Ipsum** - Generate placeholder text  
+🔐 **Hash** - Generate MD5, SHA-1, SHA-256, SHA-512 hashes
+
+### Calculators (3 Tools)
+💵 **Tip Calculator** - Calculate tips and split bills  
+🏷️ **Discount Calculator** - Calculate discounts and final prices  
+📊 **Percentage Calculator** - Calculate percentages and changes
+
+### Converters (4 Tools)
+🔤 **Base64** - Encode/decode Base64 strings  
+🔡 **Case Converter** - Convert text cases  
+🎨 **Color Converter** - Convert HEX, RGB, HSL  
+🔗 **URL Encoder** - Encode/decode URLs
+
+### Text Tools (2 Tools)
+🔢 **Character Counter** - Count characters, words, lines  
+📋 **JSON Formatter** - Format, validate, and minify JSON
 
 ## Why FileForge?
 
@@ -24,10 +47,10 @@ Process your files entirely in your browser - no uploads, no servers, no privacy
 ## Tech Stack
 
 - Pure HTML/CSS/JavaScript
-- jsPDF - PDF generation
-- pdf-lib - PDF manipulation
-- JSZip - Batch downloads
-- Remove.bg API - Background removal
+- **PDF Tools**: jsPDF, pdf-lib
+- **QR Code**: QRCode.js
+- **File Downloads**: JSZip for batch downloads
+- **Background Removal**: Remove.bg API (optional feature)
 
 ## Local Development
 
