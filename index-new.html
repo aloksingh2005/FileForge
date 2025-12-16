@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="FileForge Ultimate - 117+ free online tools for file processing, generators, calculators, converters, text tools, and more. All client-side, privacy-first.">
+    <meta name="keywords" content="file converter, tools, generators, calculators, pdf, image, utilities, online tools">
+    <title>FileForge Ultimate - 117+ Free Online Tools</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/tabs.css">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="FileForge">
+
+    <!-- Favicon -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔨</text></svg>">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    🔨 FileForge <span style="font-size: 0.7em; opacity: 0.8;">Ultimate</span>
+                </a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="https://github.com/aloksingh2005/FileForge" target="_blank">GitHub</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" style="padding: 3rem 0 2rem;">
+        <div class="container container-narrow">
+            <h1 class="hero-title" style="font-size: 2.5rem;">117+ Free Online Tools</h1>
+            <p class="hero-subtitle">
+                All-in-one platform for file processing, generators, calculators, converters, text tools, and utilities.
+                100% client-side,
+                privacy-first. All tools ready to use!
+            </p>
+        </div>
+    </section>
+
+    <!-- Search Bar -->
+    <div class="tool-search-container">
+        <div class="tool-search">
+            <span class="tool-search-icon">🔍</span>
+            <input type="text" id="toolSearch" placeholder="Search tools... (e.g., 'PDF', 'QR Code', 'Calculator')"
+                autocomplete="off">
+        </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="tabs-container">
+        <div class="container">
+            <div class="tabs-wrapper">
+                <button class="tab active" data-category="file-processing">
+                    <span class="tab-icon">📁</span>
+                    File Processing
+                    <span class="tab-count">14</span>
+                </button>
+                <button class="tab" data-category="generators">
+                    <span class="tab-icon">🔧</span>
+                    Generators
+                    <span class="tab-count">28</span>
+                </button>
+                <button class="tab" data-category="calculators">
+                    <span class="tab-icon">🔢</span>
+                    Calculators
+                    <span class="tab-count">19</span>
+                </button>
+                <button class="tab" data-category="converters">
+                    <span class="tab-icon">🔄</span>
+                    Converters
+                    <span class="tab-count">22</span>
+                </button>
+                <button class="tab" data-category="text-design">
+                    <span class="tab-icon">📝</span>
+                    Text & Design
+                    <span class="tab-count">33</span>
+                </button>
+                <button class="tab" data-category="dev-tools">
+                    <span class="tab-icon">👨‍💻</span>
+                    Dev Tools
+                    <span class="tab-count">7</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab Contents -->
+    <main class="container">
+
+        <!-- PLACEHOLDER FOR GENERATED CONTENT -->
+        <!-- This section will be replaced with generated tool cards -->
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+                <p style="font-size: 0.875rem; margin-top: var(--spacing-sm);">
+                    © 2024 FileForge Ultimate. 100% Client-Side • Privacy First • Open Source
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/tabs.js"></script>
+
+    <script>
+        // Register service worker for PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(reg => console.log('Service Worker registered'))
+                .catch(err => console.log('Service Worker registration failed'));
+        }
+    </script>
+</body>
+
+</html>
