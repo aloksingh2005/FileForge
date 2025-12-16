@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tailwind Class Generator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🎨 Tailwind Class Generator</h1>
+                <p class="hero-subtitle">Generate Tailwind CSS classes for common patterns</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Select Pattern</h4>
+                <div class="card-content">
+                    <select id="pattern" onchange="generate()"
+                        style="width: 100%; padding: 0.75rem; border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); border: 2px solid var(--bg-tertiary); font-size: 1rem;">
+                        <option value="button">Button</option>
+                        <option value="card">Card</option>
+                        <option value="flexCenter">Flex Center</option>
+                        <option value="gridCols">Grid 3 Columns</option>
+                        <option value="form">Form Input</option>
+                        <option value="gradient">Gradient Background</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">Generated Classes</h4>
+                <div class="card-content">
+                    <textarea id="output" readonly rows="4"
+                        style="width: 100%; padding: var(--spacing-md); background: var(--bg-tertiary); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; font-family: monospace; resize: vertical;"></textarea>
+                    <button class="btn btn-success btn-block mt-md" onclick="copyOutput()">📋 Copy Classes</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        const classes = {
+            button: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300',
+            card: 'bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-300',
+            flexCenter: 'flex items-center justify-center min-h-screen',
+            gridCols: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4',
+            form: 'w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500',
+            gradient: 'bg-gradient-to-r from-purple-400 via-pink-500 to-red-500'
+        };
+
+        function generate() {
+            const pattern = document.getElementById('pattern').value;
+            document.getElementById('output').value = classes[pattern];
+        }
+
+        function copyOutput() {
+            const output = document.getElementById('output');
+            output.select();
+            document.execCommand('copy');
+            showToast('Classes copied!', 'success');
+        }
+
+        generate();
+    </script>
+</body>
+
+</html>

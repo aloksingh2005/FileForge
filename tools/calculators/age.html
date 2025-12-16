@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calculator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🎂 Age Calculator</h1>
+                <p class="hero-subtitle">Calculate your exact age in years, months, and days</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Enter Your Birth Date</h4>
+                <div class="card-content">
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Date of Birth</div>
+                        </div>
+                        <input type="date" id="birthdate" oninput="calculate()"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem;">
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Calculate Age As Of</div>
+                        </div>
+                        <input type="date" id="asOfDate" oninput="calculate()"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem;">
+                    </div>
+                </div>
+            </div>
+
+            <div id="results" style="display: none;">
+                <div class="card mb-lg">
+                    <h4 class="card-title">Your Age</h4>
+                    <div class="card-content">
+                        <div
+                            style="text-align: center; background: var(--bg-tertiary); padding: var(--spacing-xl); border-radius: var(--radius-md);">
+                            <div style="font-size: 3rem; font-weight: 700; color: var(--accent-primary);"><span
+                                    id="years">0</span> Years</div>
+                            <div
+                                style="font-size: 1.5rem; color: var(--text-secondary); margin-top: var(--spacing-sm);">
+                                <span id="months">0</span> Months, <span id="days">0</span> Days
+                            </div>
+                        </div>
+
+                        <div
+                            style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--spacing-md); margin-top: var(--spacing-lg);">
+                            <div
+                                style="background: var(--bg-tertiary); padding: var(--spacing-md); border-radius: var(--radius-md); text-align: center;">
+                                <div style="font-size: 0.875rem; color: var(--text-secondary);">Total Months</div>
+                                <div style="font-size: 1.5rem; font-weight: 700;" id="totalMonths">0</div>
+                            </div>
+                            <div
+                                style="background: var(--bg-tertiary); padding: var(--spacing-md); border-radius: var(--radius-md); text-align: center;">
+                                <div style="font-size: 0.875rem; color: var(--text-secondary);">Total Weeks</div>
+                                <div style="font-size: 1.5rem; font-weight: 700;" id="totalWeeks">0</div>
+                            </div>
+                            <div
+                                style="background: var(--bg-tertiary); padding: var(--spacing-md); border-radius: var(--radius-md); text-align: center;">
+                                <div style="font-size: 0.875rem; color: var(--text-secondary);">Total Days</div>
+                                <div style="font-size: 1.5rem; font-weight: 700;" id="totalDays">0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        // Set today's date as default
+        document.getElementById('asOfDate').valueAsDate = new Date();
+
+        function calculate() {
+            const birthdate = document.getElementById('birthdate').valueAsDate;
+            const asOfDate = document.getElementById('asOfDate').valueAsDate;
+
+            if (!birthdate || !asOfDate) return;
+
+            let years = asOfDate.getFullYear() - birthdate.getFullYear();
+            let months = asOfDate.getMonth() - birthdate.getMonth();
+            let days = asOfDate.getDate() - birthdate.getDate();
+
+            if (days < 0) {
+                months--;
+                const prevMonth = new Date(asOfDate.getFullYear(), asOfDate.getMonth(), 0);
+                days += prevMonth.getDate();
+            }
+
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            const totalMonths = years * 12 + months;
+            const totalDays = Math.floor((asOfDate - birthdate) / (1000 * 60 * 60 * 24));
+            const totalWeeks = Math.floor(totalDays / 7);
+
+            document.getElementById('years').textContent = years;
+            document.getElementById('months').textContent = months;
+            document.getElementById('days').textContent = days;
+            document.getElementById('totalMonths').textContent = totalMonths.toLocaleString();
+            document.getElementById('totalWeeks').textContent = totalWeeks.toLocaleString();
+            document.getElementById('totalDays').textContent = totalDays.toLocaleString();
+
+            document.getElementById('results').style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>

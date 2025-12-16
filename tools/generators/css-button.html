@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Button Generator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🎨 CSS Button Generator</h1>
+                <p class="hero-subtitle">Create beautiful CSS buttons with live preview</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Button Settings</h4>
+                <div class="card-content">
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Button Text</div>
+                        </div>
+                        <input type="text" id="btnText" value="Click Me"
+                            style="width: 200px; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary);">
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Background Color</div>
+                        </div>
+                        <input type="color" id="bgColor" value="#6366f1" style="width: 80px; height: 50px;">
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Text Color</div>
+                        </div>
+                        <input type="color" id="textColor" value="#ffffff" style="width: 80px; height: 50px;">
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Border Radius (px)</div>
+                        </div>
+                        <input type="range" id="borderRadius" min="0" max="50" value="8" oninput="updatePreview()"
+                            style="width: 200px;">
+                        <span id="radiusValue">8px</span>
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Padding (px)</div>
+                        </div>
+                        <input type="range" id="padding" min="5" max="30" value="12" oninput="updatePreview()"
+                            style="width: 200px;">
+                        <span id="paddingValue">12px</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Preview</h4>
+                <div class="card-content text-center" style="padding: var(--spacing-xl);">
+                    <button id="preview"
+                        style="cursor: pointer; border: none; font-size: 1rem; font-family: inherit;">Click Me</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">Generated CSS</h4>
+                <div class="card-content">
+                    <textarea id="cssOutput" readonly rows="12"
+                        style="width: 100%; padding: var(--spacing-md); background: var(--bg-secondary); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); font-family: monospace; color: var(--text-primary); font-size: 0.9rem;"></textarea>
+                    <button class="btn btn-success btn-block mt-md" onclick="copyCss()">📋 Copy CSS</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        document.getElementById('btnText').addEventListener('input', updatePreview);
+        document.getElementById('bgColor').addEventListener('input', updatePreview);
+        document.getElementById('textColor').addEventListener('input', updatePreview);
+        document.getElementById('borderRadius').addEventListener('input', updatePreview);
+        document.getElementById('padding').addEventListener('input', updatePreview);
+
+        function updatePreview() {
+            const text = document.getElementById('btnText').value;
+            const bgColor = document.getElementById('bgColor').value;
+            const textColor = document.getElementById('textColor').value;
+            const radius = document.getElementById('borderRadius').value;
+            const padding = document.getElementById('padding').value;
+
+            document.getElementById('radiusValue').textContent = radius + 'px';
+            document.getElementById('paddingValue').textContent = padding + 'px';
+
+            const preview = document.getElementById('preview');
+            preview.textContent = text;
+            preview.style.backgroundColor = bgColor;
+            preview.style.color = textColor;
+            preview.style.borderRadius = radius + 'px';
+            preview.style.padding = padding + 'px ' + (padding * 2) + 'px';
+
+            const css = `.custom-button {
+  background-color: ${bgColor};
+  color: ${textColor};
+  border: none;
+  border-radius: ${radius}px;
+  padding: ${padding}px ${padding * 2}px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.custom-button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.custom-button:active {
+  transform: translateY(0);
+}`;
+
+            document.getElementById('cssOutput').value = css;
+        }
+
+        function copyCss() {
+            const css = document.getElementById('cssOutput');
+            css.select();
+            document.execCommand('copy');
+            showToast('CSS copied!', 'success');
+        }
+
+        updatePreview();
+    </script>
+</body>
+
+</html>

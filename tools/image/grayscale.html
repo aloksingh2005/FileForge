@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grayscale Image Tool - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>⚫ Grayscale Image Tool</h1>
+                <p class="hero-subtitle">Convert images to grayscale</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Upload Image</h4>
+                <div class="card-content">
+                    <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="loadImage()">
+                    <button class="btn btn-primary btn-block" onclick="document.getElementById('fileInput').click()">📁
+                        Select Image</button>
+                </div>
+            </div>
+
+            <div id="resultSection" style="display: none;">
+                <div class="card mb-lg">
+                    <h4 class="card-title">Before & After</h4>
+                    <div class="card-content">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md);">
+                            <div>
+                                <p style="text-align: center; margin-bottom: var(--spacing-sm); font-weight: 600;">
+                                    Original</p>
+                                <canvas id="original"
+                                    style="width: 100%; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md);"></canvas>
+                            </div>
+                            <div>
+                                <p style="text-align: center; margin-bottom: var(--spacing-sm); font-weight: 600;">
+                                    Grayscale</p>
+                                <canvas id="grayscale"
+                                    style="width: 100%; border: 2px solid var(--accent-primary); border-radius: var(--radius-md);"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <button class="btn btn-success btn-block" onclick="downloadImage()">📥 Download Grayscale
+                            Image</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function loadImage() {
+            const file = document.getElementById('fileInput').files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    // Original
+                    const originalCanvas = document.getElementById('original');
+                    const originalCtx = originalCanvas.getContext('2d');
+                    originalCanvas.width = img.width;
+                    originalCanvas.height = img.height;
+                    originalCtx.drawImage(img, 0, 0);
+
+                    // Grayscale
+                    const grayscaleCanvas = document.getElementById('grayscale');
+                    const grayscaleCtx = grayscaleCanvas.getContext('2d');
+                    grayscaleCanvas.width = img.width;
+                    grayscaleCanvas.height = img.height;
+                    grayscaleCtx.drawImage(img, 0, 0);
+
+                    const imageData = grayscaleCtx.getImageData(0, 0, img.width, img.height);
+                    const data = imageData.data;
+
+                    for (let i = 0; i < data.length; i += 4) {
+                        const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+                        data[i] = gray;
+                        data[i + 1] = gray;
+                        data[i + 2] = gray;
+                    }
+
+                    grayscaleCtx.putImageData(imageData, 0, 0);
+                    document.getElementById('resultSection').style.display = 'block';
+                    showToast('Converted to grayscale!', 'success');
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function downloadImage() {
+            const canvas = document.getElementById('grayscale');
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'grayscale-image.png';
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('Downloaded!', 'success');
+            });
+        }
+    </script>
+</body>
+
+</html>

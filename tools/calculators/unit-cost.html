@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit Cost Calculator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🏷️ Unit Cost Calculator</h1>
+                <p class="hero-subtitle">Calculate cost per unit for better value comparison</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Product 1</h4>
+                <div class="card-content">
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Price (₹)</div>
+                        </div>
+                        <input type="number" id="price1" value="100" on input="calculate()"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Quantity</div>
+                        </div>
+                        <input type="number" id="qty1" value="500" oninput="calculate()"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+
+                    <div
+                        style="text-align: center; margin-top: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md);">
+                        <strong>Unit Cost: ₹ <span id="unit1">0.00</span></strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Product 2</h4>
+                <div class="card-content">
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Price (₹)</div>
+                        </div>
+                        <input type="number" id="price2" value="150" oninput="calculate()"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Quantity</div>
+                        </div>
+                        <input type="number" id="qty2" value="1000" oninput="calculate()"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+
+                    <div
+                        style="text-align: center; margin-top: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md);">
+                        <strong>Unit Cost: ₹ <span id="unit2">0.00</span></strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">Best Value</h4>
+                <div class="card-content">
+                    <div id="bestValue"
+                        style="text-align: center; padding: var(--spacing-xl); background: var(--bg-tertiary); border-radius: var(--radius-md); font-size: 1.5rem; font-weight: 700; color: var(--success);">
+                        Calculate to see best value
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function calculate() {
+            const price1 = parseFloat(document.getElementById('price1').value) || 0;
+            const qty1 = parseFloat(document.getElementById('qty1').value) || 0;
+            const price2 = parseFloat(document.getElementById('price2').value) || 0;
+            const qty2 = parseFloat(document.getElementById('qty2').value) || 0;
+
+            const unit1 = qty1 > 0 ? price1 / qty1 : 0;
+            const unit2 = qty2 > 0 ? price2 / qty2 : 0;
+
+            document.getElementById('unit1').textContent = unit1.toFixed(4);
+            document.getElementById('unit2').textContent = unit2.toFixed(4);
+
+            let bestValue = '';
+            if (unit1 > 0 && unit2 > 0) {
+                if (unit1 < unit2) {
+                    const savings = ((unit2 - unit1) / unit2 * 100).toFixed(1);
+                    bestValue = `Product 1 is better value (${savings}% cheaper per unit)`;
+                } else if (unit2 < unit1) {
+                    const savings = ((unit1 - unit2) / unit1 * 100).toFixed(1);
+                    bestValue = `Product 2 is better value (${savings}% cheaper per unit)`;
+                } else {
+                    bestValue = 'Both products have the same unit cost';
+                }
+            }
+
+            document.getElementById('bestValue').textContent = bestValue || 'Enter values to compare';
+        }
+
+        calculate();
+    </script>
+</body>
+
+</html>

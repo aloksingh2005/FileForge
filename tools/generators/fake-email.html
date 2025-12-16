@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Generator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>📧 Fake Email Generator</h1>
+                <p class="hero-subtitle">Generate random fake email addresses</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Generate Options</h4>
+                <div class="card-content">
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Number of Emails</div>
+                        </div>
+                        <input type="number" id="count" value="10" min="1" max="100"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+
+                    <button class="btn btn-primary btn-block mt-lg" onclick="generate()">📧 Generate Emails</button>
+                </div>
+            </div>
+
+            <div id="resultSection" style="display: none;">
+                <div class="card">
+                    <h4 class="card-title">Generated Emails</h4>
+                    <div class="card-content">
+                        <textarea id="output" readonly rows="15"
+                            style="width: 100%; padding: var(--spacing-md); background: var(--bg-tertiary); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.95rem; font-family: monospace; resize: vertical;"></textarea>
+                        <button class="btn btn-success btn-block mt-md" onclick="copyOutput()">📋 Copy All
+                            Emails</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        const firstNames = ['john', 'jane', 'michael', 'sarah', 'david', 'emily', 'james', 'emma', 'robert', 'olivia', 'william', 'sophia', 'richard', 'ava', 'joseph', 'isabella', 'thomas', 'mia', 'charles', 'charlotte'];
+        const lastNames = ['smith', 'johnson', 'brown', 'davis', 'miller', 'wilson', 'moore', 'taylor', 'anderson', 'thomas', 'jackson', 'white', 'harris', 'martin', 'thompson', 'garcia', 'martinez', 'robinson', 'clark', 'rodriguez'];
+        const domains = ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com', 'example.com', 'test.com', 'mail.com', 'email.com'];
+
+        function generate() {
+            const count = parseInt(document.getElementById('count').value) || 10;
+            const emails = [];
+
+            for (let i = 0; i < count; i++) {
+                const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+                const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+                const domain = domains[Math.floor(Math.random() * domains.length)];
+                const num = Math.floor(Math.random() * 999);
+
+                const format = Math.floor(Math.random() * 4);
+                let email;
+
+                switch (format) {
+                    case 0: email = `${firstName}.${lastName}@${domain}`; break;
+                    case 1: email = `${firstName}${lastName}${num}@${domain}`; break;
+                    case 2: email = `${firstName}_${lastName}@${domain}`; break;
+                    case 3: email = `${firstName}${num}@${domain}`; break;
+                }
+
+                emails.push(email);
+            }
+
+            document.getElementById('output').value = emails.join('\n');
+            document.getElementById('resultSection').style.display = 'block';
+            showToast(`Generated ${count} emails!`, 'success');
+        }
+
+        function copyOutput() {
+            const output = document.getElementById('output');
+            output.select();
+            document.execCommand('copy');
+            showToast('Copied!', 'success');
+        }
+
+        generate();
+    </script>
+</body>
+
+</html>

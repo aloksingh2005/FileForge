@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEX to RGB Converter - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🎨 HEX ↔ RGB Converter</h1>
+                <p class="hero-subtitle">Convert between HEX and RGB color formats</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">HEX to RGB</h4>
+                <div class="card-content">
+                    <input type="text" id="hexInput" placeholder="#FF5733" oninput="hexToRgb()"
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem; font-family: monospace;">
+                    <div id="rgbOutput"
+                        style="margin-top: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); font-family: monospace; font-size: 1.1rem; text-align: center;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">RGB to HEX</h4>
+                <div class="card-content">
+                    <div
+                        style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--spacing-md); margin-bottom: var(--spacing-md);">
+                        <div>
+                            <label style="font-size: 0.875rem; color: var(--text-secondary);">R</label>
+                            <input type="number" id="rInput" min="0" max="255" placeholder="255" oninput="rgbToHex()"
+                                style="width: 100%; padding: var(--spacing-sm); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary);">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.875rem; color: var(--text-secondary);">G</label>
+                            <input type="number" id="gInput" min="0" max="255" placeholder="87" oninput="rgbToHex()"
+                                style="width: 100%; padding: var(--spacing-sm); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary);">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.875rem; color: var(--text-secondary);">B</label>
+                            <input type="number" id="bInput" min="0" max="255" placeholder="51" oninput="rgbToHex()"
+                                style="width: 100%; padding: var(--spacing-sm); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary);">
+                        </div>
+                    </div>
+                    <div id="hexOutput"
+                        style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); font-family: monospace; font-size: 1.1rem; text-align: center;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">Color Preview</h4>
+                <div class="card-content">
+                    <div id="colorPreview" style="height: 150px; border-radius: var(--radius-md); background: #FF5733;">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function hexToRgb() {
+            let hex = document.getElementById('hexInput').value.trim();
+            if (!hex.startsWith('#')) hex = '#' + hex;
+
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            if (result) {
+                const r = parseInt(result[1], 16);
+                const g = parseInt(result[2], 16);
+                const b = parseInt(result[3], 16);
+                document.getElementById('rgbOutput').textContent = `rgb(${r}, ${g}, ${b})`;
+                document.getElementById('colorPreview').style.background = hex;
+            } else {
+                document.getElementById('rgbOutput').textContent = 'Invalid HEX';
+            }
+        }
+
+        function rgbToHex() {
+            const r = parseInt(document.getElementById('rInput').value) || 0;
+            const g = parseInt(document.getElementById('gInput').value) || 0;
+            const b = parseInt(document.getElementById('bInput').value) || 0;
+
+            const hex = '#' + [r, g, b].map(x => {
+                const h = x.toString(16);
+                return h.length === 1 ? '0' + h : h;
+            }).join('');
+
+            document.getElementById('hexOutput').textContent = hex.toUpperCase();
+            document.getElementById('colorPreview').style.background = hex;
+        }
+    </script>
+</body>
+
+</html>

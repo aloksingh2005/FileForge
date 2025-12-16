@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Rotator/Flipper - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🔄 Image Rotator/Flipper</h1>
+                <p class="hero-subtitle">Rotate and flip images</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Upload Image</h4>
+                <div class="card-content">
+                    <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="loadImage()">
+                    <button class="btn btn-primary btn-block" onclick="document.getElementById('fileInput').click()">📁
+                        Select Image</button>
+                </div>
+            </div>
+
+            <div id="editSection" style="display: none;">
+                <div class="card mb-lg">
+                    <h4 class="card-title">Transform Options</h4>
+                    <div class="card-content">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md);">
+                            <button class="btn btn-secondary" onclick="rotate(-90)">↶ Rotate Left</button>
+                            <button class="btn btn-secondary" onclick="rotate(90)">↷ Rotate Right</button>
+                            <button class="btn btn-secondary" onclick="flip('horizontal')">↔️ Flip Horizontal</button>
+                            <button class="btn btn-secondary" onclick="flip('vertical')">↕️ Flip Vertical</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-lg">
+                    <h4 class="card-title">Preview</h4>
+                    <div class="card-content text-center">
+                        <canvas id="canvas"
+                            style="max-width: 100%; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md);"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <button class="btn btn-success btn-block" onclick="downloadImage()">📥 Download Image</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        let img = new Image();
+        let rotation = 0;
+        let flipH = 1, flipV = 1;
+
+        function loadImage() {
+            const file = document.getElementById('fileInput').files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                img.src = e.target.result;
+                img.onload = () => {
+                    rotation = 0;
+                    flipH = 1;
+                    flipV = 1;
+                    draw();
+                    document.getElementById('editSection').style.display = 'block';
+                    showToast('Image loaded!', 'success');
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function rotate(deg) {
+            rotation += deg;
+            draw();
+            showToast(`Rotated ${deg}°`, 'success');
+        }
+
+        function flip(direction) {
+            if (direction === 'horizontal') {
+                flipH *= -1;
+            } else {
+                flipV *= -1;
+            }
+            draw();
+            showToast(`Flipped ${direction}`, 'success');
+        }
+
+        function draw() {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+
+            const rad = rotation * Math.PI / 180;
+            const sin = Math.abs(Math.sin(rad));
+            const cos = Math.abs(Math.cos(rad));
+
+            canvas.width = img.width * cos + img.height * sin;
+            canvas.height = img.width * sin + img.height * cos;
+
+            ctx.save();
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate(rad);
+            ctx.scale(flipH, flipV);
+            ctx.drawImage(img, -img.width / 2, -img.height / 2);
+            ctx.restore();
+        }
+
+        function downloadImage() {
+            const canvas = document.getElementById('canvas');
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'transformed-image.png';
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('Downloaded!', 'success');
+            });
+        }
+    </script>
+</body>
+
+</html>

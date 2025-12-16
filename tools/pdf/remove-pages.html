@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Page Remover - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🗑️ PDF Page Remover</h1>
+                <p class="hero-subtitle">Remove specific pages from PDF</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Upload PDF</h4>
+                <div class="card-content">
+                    <input type="file" id="fileInput" accept=".pdf" style="display: none;" onchange="loadPDF()">
+                    <button class="btn btn-primary btn-block" onclick="document.getElementById('fileInput').click()">📁
+                        Select PDF File</button>
+                </div>
+            </div>
+
+            <div id="editSection" style="display: none;">
+                <div class="card mb-lg">
+                    <h4 class="card-title">Select Pages to Remove</h4>
+                    <div class="card-content">
+                        <div
+                            style="background: var(--bg-tertiary); padding: var(--spacing-md); border-radius: var(--radius-md); margin-bottom: var(--spacing-md);">
+                            Total Pages: <strong id="totalPages">0</strong>
+                        </div>
+                        <input type="text" id="pagesToRemove" placeholder="e.g., 1,3,5-7"
+                            style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem;">
+                        <p style="margin-top: var(--spacing-sm); font-size: 0.875rem; color: var(--text-secondary);">
+                            Enter page numbers separated by commas, or use ranges (e.g., 1,3,5-7)</p>
+                        <button class="btn btn-danger btn-block mt-lg" onclick="removePagesFromPDF()">🗑️ Remove
+                            Pages</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        const { PDFDocument } = PDFLib;
+        let pdfBytes;
+        let totalPageCount;
+
+        async function loadPDF() {
+            const file = document.getElementById('fileInput').files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                pdfBytes = new Uint8Array(e.target.result);
+                const pdfDoc = await PDFDocument.load(pdfBytes);
+                totalPageCount = pdfDoc.getPageCount();
+
+                document.getElementById('totalPages').textContent = totalPageCount;
+                document.getElementById('editSection').style.display = 'block';
+                showToast(`PDF loaded: ${totalPageCount} pages`, 'success');
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        async function removePagesFromPDF() {
+            const input = document.getElementById('pagesToRemove').value.trim();
+            if (!input) {
+                showToast('Please specify pages to remove', 'warning');
+                return;
+            }
+
+            const pagesToRemove = parsePageNumbers(input);
+            if (pagesToRemove.length === 0) {
+                showToast('Invalid page numbers', 'error');
+                return;
+            }
+
+            const pdfDoc = await PDFDocument.load(pdfBytes);
+            const newPdf = await PDFDocument.create();
+
+            for (let i = 0; i < totalPageCount; i++) {
+                if (!pagesToRemove.includes(i + 1)) {
+                    const [copiedPage] = await newPdf.copyPages(pdfDoc, [i]);
+                    newPdf.addPage(copiedPage);
+                }
+            }
+
+            const pdfBytesResult = await newPdf.save();
+            const blob = new Blob([pdfBytesResult], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'removed-pages.pdf';
+            a.click();
+            URL.revokeObjectURL(url);
+
+            showToast(`Removed ${pagesToRemove.length} pages!`, 'success');
+        }
+
+        function parsePageNumbers(input) {
+            const pages = [];
+            const parts = input.split(',');
+
+            parts.forEach(part => {
+                part = part.trim();
+                if (part.includes('-')) {
+                    const [start, end] = part.split('-').map(n => parseInt(n.trim()));
+                    for (let i = start; i <= end; i++) {
+                        if (i >= 1 && i <= totalPageCount) pages.push(i);
+                    }
+                } else {
+                    const page = parseInt(part);
+                    if (page >= 1 && page <= totalPageCount) pages.push(page);
+                }
+            });
+
+            return [...new Set(pages)].sort((a, b) => a - b);
+        }
+    </script>
+</body>
+
+</html>

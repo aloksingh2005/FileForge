@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Generator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🔢 OTP Generator</h1>
+                <p class="hero-subtitle">Generate secure one-time passwords</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">OTP Settings</h4>
+                <div class="card-content">
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">OTP Length</div>
+                        </div>
+                        <select id="length"
+                            style="padding: 0.75rem; border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); border: 2px solid var(--bg-tertiary);">
+                            <option value="4">4 Digits</option>
+                            <option value="6" selected>6 Digits</option>
+                            <option value="8">8 Digits</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-primary btn-block mt-lg" onclick="generate()">🔑 Generate OTP</button>
+                </div>
+            </div>
+
+            <div id="results" style="display: none;">
+                <div class="card">
+                    <h4 class="card-title">Your OTP</h4>
+                    <div class="card-content text-center">
+                        <div id="otpDisplay"
+                            style="font-size: 3rem; font-weight: 700; color: var(--accent-primary); font-family: monospace; letter-spacing: 0.3rem; margin: var(--spacing-xl) 0;">
+                        </div>
+                        <button class="btn btn-success btn-block" onclick="copyOTP()">📋 Copy OTP</button>
+                        <button class="btn btn-secondary btn-block mt-sm" onclick="generate()">🔄 Generate New</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        let currentOTP = '';
+
+        function generate() {
+            const length = parseInt(document.getElementById('length').value);
+            let otp = '';
+
+            for (let i = 0; i < length; i++) {
+                otp += Math.floor(Math.random() * 10);
+            }
+
+            currentOTP = otp;
+            document.getElementById('otpDisplay').textContent = otp;
+            document.getElementById('results').style.display = 'block';
+            showToast('OTP generated!', 'success');
+        }
+
+        function copyOTP() {
+            navigator.clipboard.writeText(currentOTP);
+            showToast('OTP copied: ' + currentOTP, 'success');
+        }
+    </script>
+</body>
+
+</html>

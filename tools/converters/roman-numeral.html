@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roman Numeral Converter - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🏛️ Roman Numeral Converter</h1>
+                <p class="hero-subtitle">Convert between numbers and Roman numerals</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Number to Roman</h4>
+                <div class="card-content">
+                    <input type="number" id="numberInput" placeholder="Enter number (1-3999)" min="1" max="3999"
+                        style="width: 100%; padding: var(--spacing-lg); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.2rem; text-align: center;">
+                    <button class="btn btn-primary btn-block mt-md" onclick="numberToRoman()">➡️ Convert to
+                        Roman</button>
+                    <div id="romanResult"
+                        style="display: none; margin-top: var(--spacing-lg); padding: var(--spacing-xl); background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: var(--radius-lg); text-align: center;">
+                        <div
+                            style="font-size: 3rem; font-weight: 700; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">Roman to Number</h4>
+                <div class="card-content">
+                    <input type="text" id="romanInput" placeholder="Enter Roman numeral (e.g., MCMXC)"
+                        style="width: 100%; padding: var(--spacing-lg); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.2rem; text-align: center; text-transform: uppercase;">
+                    <button class="btn btn-secondary btn-block mt-md" onclick="romanToNumber()">⬅️ Convert to
+                        Number</button>
+                    <div id="numberResult"
+                        style="display: none; margin-top: var(--spacing-lg); padding: var(--spacing-xl); background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-radius: var(--radius-lg); text-align: center;">
+                        <div
+                            style="font-size: 3rem; font-weight: 700; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function numberToRoman() {
+            const num = parseInt(document.getElementById('numberInput').value);
+            if (!num || num < 1 || num > 3999) {
+                showToast('Please enter a number between 1 and 3999', 'warning');
+                return;
+            }
+
+            const romanNumerals = [
+                ['M', 1000], ['CM', 900], ['D', 500], ['CD', 400],
+                ['C', 100], ['XC', 90], ['L', 50], ['XL', 40],
+                ['X', 10], ['IX', 9], ['V', 5], ['IV', 4], ['I', 1]
+            ];
+
+            let result = '';
+            let remaining = num;
+
+            for (const [roman, value] of romanNumerals) {
+                while (remaining >= value) {
+                    result += roman;
+                    remaining -= value;
+                }
+            }
+
+            const resultDiv = document.getElementById('romanResult');
+            resultDiv.querySelector('div').textContent = result;
+            resultDiv.style.display = 'block';
+            showToast('Converted to Roman!', 'success');
+        }
+
+        function romanToNumber() {
+            const roman = document.getElementById('romanInput').value.toUpperCase();
+            if (!roman || !/^[MDCLXVI]+$/.test(roman)) {
+                showToast('Please enter valid Roman numerals', 'warning');
+                return;
+            }
+
+            const romanValues = { M: 1000, D: 500, C: 100, L: 50, X: 10, V: 5, I: 1 };
+            let result = 0;
+
+            for (let i = 0; i < roman.length; i++) {
+                const current = romanValues[roman[i]];
+                const next = romanValues[roman[i + 1]];
+
+                if (next && current < next) {
+                    result -= current;
+                } else {
+                    result += current;
+                }
+            }
+
+            const resultDiv = document.getElementById('numberResult');
+            resultDiv.querySelector('div').textContent = result;
+            resultDiv.style.display = 'block';
+            showToast('Converted to Number!', 'success');
+        }
+    </script>
+</body>
+
+</html>

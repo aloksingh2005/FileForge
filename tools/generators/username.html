@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Username Generator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>👤 Username Generator</h1>
+                <p class="hero-subtitle">Generate unique and creative usernames</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Settings</h4>
+                <div class="card-content">
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Username Style</div>
+                        </div>
+                        <select id="style"
+                            style="padding: 0.75rem; border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); border: 2px solid var(--bg-tertiary);">
+                            <option value="adjective_noun">Adjective + Noun</option>
+                            <option value="noun_number">Noun + Number</option>
+                            <option value="random">Random</option>
+                            <option value="cool">Cool Style</option>
+                        </select>
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Number of Usernames</div>
+                        </div>
+                        <input type="number" id="count" value="5" min="1" max="20"
+                            style="width: 100px; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary);">
+                    </div>
+
+                    <button class="btn btn-primary btn-block mt-lg" onclick="generate()">✨ Generate Usernames</button>
+                </div>
+            </div>
+
+            <div id="results" style="display: none;">
+                <div class="card">
+                    <h4 class="card-title">Generated Usernames</h4>
+                    <div class="card-content" id="usernameList"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        const adjectives = ['Cool', 'Smart', 'Happy', 'Swift', 'Brave', 'Calm', 'Wild', 'Bold', 'Quick', 'Wise', 'Dark', 'Bright', 'Silent', 'Loud', 'Epic', 'Mega', 'Ultra', 'Pro', 'Elite', 'Alpha'];
+        const nouns = ['Tiger', 'Eagle', 'Wolf', 'Dragon', 'Phoenix', 'Falcon', 'Lion', 'Bear', 'Shark', 'Panther', 'Ninja', 'Warrior', 'Knight', 'Hunter', 'Gamer', 'Coder', 'Master', 'Legend', 'Champion', 'King'];
+
+        function generate() {
+            const style = document.getElementById('style').value;
+            const count = parseInt(document.getElementById('count').value);
+            const results = [];
+
+            for (let i = 0; i < count; i++) {
+                let username = '';
+                switch (style) {
+                    case 'adjective_noun':
+                        username = adjectives[Math.floor(Math.random() * adjectives.length)] + nouns[Math.floor(Math.random() * nouns.length)];
+                        break;
+                    case 'noun_number':
+                        username = nouns[Math.floor(Math.random() * nouns.length)] + Math.floor(Math.random() * 9999);
+                        break;
+                    case 'cool':
+                        username = 'xX_' + nouns[Math.floor(Math.random() * nouns.length)] + '_Xx';
+                        break;
+                    case 'random':
+                        username = adjectives[Math.floor(Math.random() * adjectives.length)] + nouns[Math.floor(Math.random() * nouns.length)] + Math.floor(Math.random() * 999);
+                        break;
+                }
+                results.push(username);
+            }
+
+            const listHTML = results.map(u => `
+                <div style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); margin-bottom: var(--spacing-sm); display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-family: monospace; font-size: 1.1rem;">${u}</span>
+                    <button class="btn btn-sm btn-secondary" onclick="copyText('${u}')">📋 Copy</button>
+                </div>
+            `).join('');
+
+            document.getElementById('usernameList').innerHTML = listHTML;
+            document.getElementById('results').style.display = 'block';
+            showToast('Generated ' + count + ' usernames!', 'success');
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text);
+            showToast('Copied: ' + text, 'success');
+        }
+    </script>
+</body>
+
+</html>

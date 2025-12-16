@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF to Image - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🖼️ PDF to Image Converter</h1>
+                <p class="hero-subtitle">Convert PDF pages to images</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Upload PDF</h4>
+                <div class="card-content">
+                    <input type="file" id="fileInput" accept=".pdf" style="display: none;" onchange="loadPDF()">
+                    <button class="btn btn-primary btn-block" onclick="document.getElementById('fileInput').click()">📁
+                        Select PDF File</button>
+                </div>
+            </div>
+
+            <div id="statusSection" style="display: none;">
+                <div class="card mb-lg">
+                    <h4 class="card-title">PDF Info</h4>
+                    <div class="card-content text-center">
+                        <div
+                            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: var(--spacing-xl); border-radius: var(--radius-lg); color: white;">
+                            <div style="font-size: 2.5rem; font-weight: 700;" id="pageCount">0</div>
+                            <div style="margin-top: var(--spacing-xs); opacity: 0.9;">pages found</div>
+                        </div>
+                        <button class="btn btn-success btn-block mt-lg" onclick="convertToImages()">🖼️ Convert All
+                            Pages to Images</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="downloadSection" style="display: none;">
+                <div class="card">
+                    <h4 class="card-title">Download Images</h4>
+                    <div class="card-content">
+                        <div id="downloadLinks" style="display: grid; gap: var(--spacing-sm);"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        let pdfDoc = null;
+
+        async function loadPDF() {
+            const file = document.getElementById('fileInput').files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                const typedarray = new Uint8Array(e.target.result);
+                pdfDoc = await pdfjsLib.getDocument(typedarray).promise;
+
+                document.getElementById('pageCount').textContent = pdfDoc.numPages;
+                document.getElementById('statusSection').style.display = 'block';
+                showToast(`PDF loaded: ${pdfDoc.numPages} pages`, 'success');
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        async function convertToImages() {
+            showToast('Converting pages...', 'info');
+            const links = document.getElementById('downloadLinks');
+            links.innerHTML = '';
+
+            for (let i = 1; i <= pdfDoc.numPages; i++) {
+                const page = await pdfDoc.getPage(i);
+                const viewport = page.getViewport({ scale: 2.0 });
+
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                await page.render({ canvasContext: context, viewport: viewport }).promise;
+
+                canvas.toBlob((blob) => {
+                    const url = URL.createObjectURL(blob);
+                    const linkBtn = document.createElement('button');
+                    linkBtn.className = 'btn btn-secondary btn-block';
+                    linkBtn.textContent = `📷 Download Page ${i}`;
+                    linkBtn.onclick = () => {
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `page-${i}.png`;
+                        a.click();
+                        showToast(`Downloaded page ${i}`, 'success');
+                    };
+                    links.appendChild(linkBtn);
+                });
+            }
+
+            document.getElementById('downloadSection').style.display = 'block';
+            showToast('Conversion complete!', 'success');
+        }
+    </script>
+</body>
+
+</html>

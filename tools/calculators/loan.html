@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Calculator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>💳 Loan Calculator</h1>
+                <p class="hero-subtitle">Calculate loan payments and total cost</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Loan Details</h4>
+                <div class="card-content">
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Loan Amount (₹)</div>
+                        </div>
+                        <input type="number" id="amount" value="500000" oninput="calculate()"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Interest Rate (% per year)</div>
+                        </div>
+                        <input type="number" id="rate" value="10" step="0.1" oninput="calculate()"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Loan Tenure (months)</div>
+                        </div>
+                        <input type="number" id="months" value="60" oninput="calculate()"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">Loan Summary</h4>
+                <div class="card-content">
+                    <div
+                        style="text-align: center; background: var(--bg-tertiary); padding: var(--spacing-xl); border-radius: var(--radius-md); margin-bottom: var(--spacing-md);">
+                        <div
+                            style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: var(--spacing-xs);">
+                            Monthly Payment</div>
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-primary);">₹ <span
+                                id="monthly">0</span></div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md);">
+                        <div
+                            style="background: var(--bg-tertiary); padding: var(--spacing-lg); border-radius: var(--radius-md); text-align: center;">
+                            <div
+                                style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: var(--spacing-xs);">
+                                Total Interest</div>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--danger);">₹ <span
+                                    id="totalInterest">0</span></div>
+                        </div>
+                        <div
+                            style="background: var(--bg-tertiary); padding: var(--spacing-lg); border-radius: var(--radius-md); text-align: center;">
+                            <div
+                                style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: var(--spacing-xs);">
+                                Total Payment</div>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--warning);">₹ <span
+                                    id="totalPayment">0</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function calculate() {
+            const principal = parseFloat(document.getElementById('amount').value) || 0;
+            const rate = parseFloat(document.getElementById('rate').value) || 0;
+            const months = parseFloat(document.getElementById('months').value) || 0;
+
+            const monthlyRate = rate / (12 * 100);
+            const monthlyPayment = (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+            const totalPayment = monthlyPayment * months;
+            const totalInterest = totalPayment - principal;
+
+            document.getElementById('monthly').textContent = Math.round(monthlyPayment).toLocaleString('en-IN');
+            document.getElementById('totalInterest').textContent = Math.round(totalInterest).toLocaleString('en-IN');
+            document.getElementById('totalPayment').textContent = Math.round(totalPayment).toLocaleString('en-IN');
+        }
+
+        calculate();
+    </script>
+</body>
+
+</html>

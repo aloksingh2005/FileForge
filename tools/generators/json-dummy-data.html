@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Dummy Data Generator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>📊 JSON Dummy Data Generator</h1>
+                <p class="hero-subtitle">Generate random JSON data for testing</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Options</h4>
+                <div class="card-content">
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Number of Records</div>
+                        </div>
+                        <input type="number" id="count" value="5" min="1" max="100"
+                            style="width: 100px; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary);">
+                    </div>
+
+                    <button class="btn btn-primary btn-block mt-lg" onclick="generate()">✨ Generate JSON Data</button>
+                </div>
+            </div>
+
+            <div id="result" style="display: none;">
+                <div class="card">
+                    <h4 class="card-title">Generated JSON</h4>
+                    <div class="card-content">
+                        <textarea id="output" readonly rows="15"
+                            style="width: 100%; padding: var(--spacing-md); background: var(--bg-tertiary); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.85rem; font-family: monospace; resize: vertical;"></textarea>
+                        <button class="btn btn-success btn-block mt-md" onclick="copyJSON()">📋 Copy JSON</button>
+                        <button class="btn btn-secondary btn-block mt-sm" onclick="downloadJSON()">📥 Download
+                            JSON</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        const firstNames = ['John', 'Jane', 'Michael', 'Emily', 'David', 'Sarah', 'James', 'Emma', 'Robert', 'Olivia'];
+        const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Martinez', 'Wilson'];
+        const companies = ['TechCorp', 'DataSystems', 'CloudWorks', 'InnovateLab', 'DigitalSolutions', 'FutureTech', 'SmartApps'];
+
+        function randomItem(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        function generatePerson() {
+            return {
+                id: Math.floor(Math.random() * 10000),
+                name: `${randomItem(firstNames)} ${randomItem(lastNames)}`,
+                email: `user${Math.floor(Math.random() * 1000)}@example.com`,
+                age: Math.floor(Math.random() * 50) + 18,
+                company: randomItem(companies),
+                active: Math.random() > 0.5
+            };
+        }
+
+        function generate() {
+            const count = parseInt(document.getElementById('count').value);
+            const data = [];
+
+            for (let i = 0; i < count; i++) {
+                data.push(generatePerson());
+            }
+
+            const json = JSON.stringify(data, null, 2);
+            document.getElementById('output').value = json;
+            document.getElementById('result').style.display = 'block';
+            showToast('JSON data generated!', 'success');
+        }
+
+        function copyJSON() {
+            const output = document.getElementById('output');
+            output.select();
+            document.execCommand('copy');
+            showToast('JSON copied!', 'success');
+        }
+
+        function downloadJSON() {
+            const content = document.getElementById('output').value;
+            const blob = new Blob([content], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'dummy-data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Downloaded!', 'success');
+        }
+    </script>
+</body>
+
+</html>

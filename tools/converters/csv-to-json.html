@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV to JSON Converter - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>📄 CSV to JSON Converter</h1>
+                <p class="hero-subtitle">Convert CSV data to JSON format</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Enter CSV</h4>
+                <div class="card-content">
+                    <textarea id="csvInput" rows="10" placeholder="name,age,city\nJohn,30,New York\nJane,25,Los Angeles"
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 0.9rem; font-family: monospace; resize: vertical;"></textarea>
+                    <button class="btn btn-primary btn-block mt-md" onclick="convert()">🔄 Convert to JSON</button>
+                </div>
+            </div>
+
+            <div id="resultSection" style="display: none;">
+                <div class="card">
+                    <h4 class="card-title">JSON Output</h4>
+                    <div class="card-content">
+                        <textarea id="jsonOutput" readonly rows="12"
+                            style="width: 100%; padding: var(--spacing-md); background: var(--bg-tertiary); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; font-family: monospace; resize: vertical;"></textarea>
+                        <button class="btn btn-success btn-block mt-md" onclick="copyOutput()">📋 Copy JSON</button>
+                        <button class="btn btn-secondary btn-block mt-sm" onclick="downloadJSON()">📥 Download
+                            JSON</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function convert() {
+            const input = document.getElementById('csvInput').value.trim();
+            if (!input) {
+                showToast('Please enter CSV data', 'warning');
+                return;
+            }
+
+            try {
+                const lines = input.split('\n').map(line => line.trim()).filter(line => line);
+                if (lines.length < 2) {
+                    showToast('CSV must have at least a header and one data row', 'error');
+                    return;
+                }
+
+                const headers = lines[0].split(',').map(h => h.trim());
+                const data = [];
+
+                for (let i = 1; i < lines.length; i++) {
+                    const values = lines[i].split(',').map(v => v.trim());
+                    const obj = {};
+                    headers.forEach((header, idx) => {
+                        obj[header] = values[idx] || '';
+                    });
+                    data.push(obj);
+                }
+
+                const json = JSON.stringify(data, null, 2);
+                document.getElementById('jsonOutput').value = json;
+                document.getElementById('resultSection').style.display = 'block';
+                showToast('Converted to JSON!', 'success');
+            } catch (error) {
+                showToast('Error: ' + error.message, 'error');
+            }
+        }
+
+        function copyOutput() {
+            const output = document.getElementById('jsonOutput');
+            output.select();
+            document.execCommand('copy');
+            showToast('JSON copied!', 'success');
+        }
+
+        function downloadJSON() {
+            const content = document.getElementById('jsonOutput').value;
+            const blob = new Blob([content], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Downloaded!', 'success');
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Cropper - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>✂️ Image Cropper</h1>
+                <p class="hero-subtitle">Crop images to custom dimensions</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Upload Image</h4>
+                <div class="card-content">
+                    <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="loadImage()">
+                    <button class="btn btn-primary btn-block" onclick="document.getElementById('fileInput').click()">📁
+                        Select Image</button>
+                </div>
+            </div>
+
+            <div id="cropSection" style="display: none;">
+                <div class="card mb-lg">
+                    <h4 class="card-title">Crop Settings</h4>
+                    <div class="card-content">
+                        <p style="color: var(--text-secondary); margin-bottom: var(--spacing-md);">Click and drag on the
+                            image to select crop area</p>
+                        <canvas id="canvas"
+                            style="max-width: 100%; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); cursor: crosshair;"></canvas>
+                        <button class="btn btn-primary btn-block mt-md" onclick="cropImage()">✂️ Crop Image</button>
+                    </div>
+                </div>
+
+                <div id="resultSection" style="display: none;">
+                    <div class="card">
+                        <h4 class="card-title">Cropped Image</h4>
+                        <div class="card-content text-center">
+                            <canvas id="result"
+                                style="max-width: 100%; border: 2px solid var(--accent-primary); border-radius: var(--radius-md);"></canvas>
+                            <button class="btn btn-success btn-block mt-md" onclick="downloadImage()">📥
+                                Download</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        let img = new Image();
+        let canvas, ctx;
+        let startX, startY, endX, endY;
+        let isDrawing = false;
+
+        function loadImage() {
+            const file = document.getElementById('fileInput').files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                img.src = e.target.result;
+                img.onload = () => {
+                    canvas = document.getElementById('canvas');
+                    ctx = canvas.getContext('2d');
+                    canvas.width = img.width > 800 ? 800 : img.width;
+                    canvas.height = img.height * (canvas.width / img.width);
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                    document.getElementById('cropSection').style.display = 'block';
+                    setupCanvas();
+                    showToast('Image loaded! Draw crop area', 'success');
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function setupCanvas() {
+            canvas.addEventListener('mousedown', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                startX = e.clientX - rect.left;
+                startY = e.clientY - rect.top;
+                isDrawing = true;
+            });
+
+            canvas.addEventListener('mousemove', (e) => {
+                if (!isDrawing) return;
+                const rect = canvas.getBoundingClientRect();
+                endX = e.clientX - rect.left;
+                endY = e.clientY - rect.top;
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                ctx.strokeStyle = '#667eea';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(startX, startY, endX - startX, endY - startY);
+            });
+
+            canvas.addEventListener('mouseup', () => {
+                isDrawing = false;
+            });
+        }
+
+        function cropImage() {
+            if (!startX || !endX) {
+                showToast('Please select crop area', 'warning');
+                return;
+            }
+
+            const scaleX = img.width / canvas.width;
+            const scaleY = img.height / canvas.height;
+
+            const cropX = Math.min(startX, endX) * scaleX;
+            const cropY = Math.min(startY, endY) * scaleY;
+            const cropWidth = Math.abs(endX - startX) * scaleX;
+            const cropHeight = Math.abs(endY - startY) * scaleY;
+
+            const resultCanvas = document.getElementById('result');
+            const resultCtx = resultCanvas.getContext('2d');
+            resultCanvas.width = cropWidth;
+            resultCanvas.height = cropHeight;
+
+            resultCtx.drawImage(img, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+            document.getElementById('resultSection').style.display = 'block';
+            showToast('Image cropped!', 'success');
+        }
+
+        function downloadImage() {
+            const resultCanvas = document.getElementById('result');
+            resultCanvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'cropped-image.png';
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('Downloaded!', 'success');
+            });
+        }
+    </script>
+</body>
+
+</html>

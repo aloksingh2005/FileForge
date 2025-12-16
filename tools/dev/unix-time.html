@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unix Time Converter - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>⏰ Unix Time Converter</h1>
+                <p class="hero-subtitle">Convert between Unix timestamp and human-readable date</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Current Unix Timestamp</h4>
+                <div class="card-content text-center">
+                    <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-primary); font-family: monospace;"
+                        id="currentTimestamp">0</div>
+                    <p style="margin-top: var(--spacing-sm); color: var(--text-secondary);" id="currentDate">-</p>
+                </div>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Unix to Date</h4>
+                <div class="card-content">
+                    <input type="number" id="unixInput" placeholder="1734567890"
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem; font-family: monospace;">
+                    <button class="btn btn-primary btn-block mt-md" onclick="unixToDate()">🔄 Convert to Date</button>
+                    <div id="unixResult"
+                        style="display: none; margin-top: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); text-align: center; font-weight: 600;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">Date to Unix</h4>
+                <div class="card-content">
+                    <input type="datetime-local" id="dateInput"
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem;">
+                    <button class="btn btn-primary btn-block mt-md" onclick="dateToUnix()">🔄 Convert to Unix</button>
+                    <div id="dateResult"
+                        style="display: none; margin-top: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); text-align: center; font-weight: 600; font-family: monospace; font-size: 1.2rem;">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function updateCurrent() {
+            const now = Date.now();
+            const timestamp = Math.floor(now / 1000);
+            document.getElementById('currentTimestamp').textContent = timestamp;
+            document.getElementById('currentDate').textContent = new Date(now).toLocaleString();
+        }
+
+        function unixToDate() {
+            const unix = parseInt(document.getElementById('unixInput').value);
+            if (!unix) {
+                showToast('Please enter a Unix timestamp', 'warning');
+                return;
+            }
+
+            const date = new Date(unix * 1000);
+            document.getElementById('unixResult').textContent = date.toLocaleString();
+            document.getElementById('unixResult').style.display = 'block';
+            showToast('Converted!', 'success');
+        }
+
+        function dateToUnix() {
+            const dateValue = document.getElementById('dateInput').value;
+            if (!dateValue) {
+                showToast('Please select a date', 'warning');
+                return;
+            }
+
+            const timestamp = Math.floor(new Date(dateValue).getTime() / 1000);
+            document.getElementById('dateResult').textContent = timestamp;
+            document.getElementById('dateResult').style.display = 'block';
+            showToast('Converted!', 'success');
+        }
+
+        updateCurrent();
+        setInterval(updateCurrent, 1000);
+    </script>
+</body>
+
+</html>

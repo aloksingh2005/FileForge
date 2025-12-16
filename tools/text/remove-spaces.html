@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove Extra Spaces - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>✂️ Remove Extra Spaces</h1>
+                <p class="hero-subtitle">Clean up extra whitespace from text</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Input Text</h4>
+                <div class="card-content">
+                    <textarea id="inputText" rows="10" placeholder="Paste text with    extra   spaces..."
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem; resize: vertical;"></textarea>
+                    <button class="btn btn-primary btn-block mt-md" onclick="clean()">✨ Remove Extra Spaces</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">Cleaned Text</h4>
+                <div class="card-content">
+                    <textarea id="outputText" readonly rows="10"
+                        style="width: 100%; padding: var(--spacing-md); background: var(--bg-tertiary); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); color: var(--text-primary); font-size: 1rem; resize: vertical;"></textarea>
+                    <button class="btn btn-success btn-block mt-md" onclick="copyOutput()">📋 Copy Result</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function clean() {
+            const text = document.getElementById('inputText').value;
+            // Remove extra spaces between words and trim
+            const cleaned = text.replace(/\s+/g, ' ').trim();
+            document.getElementById('outputText').value = cleaned;
+            showToast('Extra spaces removed!', 'success');
+        }
+
+        function copyOutput() {
+            const output = document.getElementById('outputText');
+            output.select();
+            document.execCommand('copy');
+            showToast('Copied!', 'success');
+        }
+    </script>
+</body>
+
+</html>

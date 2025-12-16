@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Viewer - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🍪 Cookie Viewer</h1>
+                <p class="hero-subtitle">View and manage browser cookies</p>
+            </div>
+
+            <div class="card mb-lg">
+                <div class="card-content">
+                    <button class="btn btn-primary btn-block" onclick="loadCookies()">🔄 Reload Cookies</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">Cookies (<span id="count">0</span>)</h4>
+                <div class="card-content">
+                    <div id="cookieList" style="display: grid; gap: var(--spacing-sm);"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function loadCookies() {
+            const cookies = document.cookie.split(';').filter(c => c.trim());
+            const list = document.getElementById('cookieList');
+            list.innerHTML = '';
+
+            document.getElementById('count').textContent = cookies.length;
+
+            if (cookies.length === 0) {
+                list.innerHTML = '<div style="text-align: center; padding: var(--spacing-xl); color: var(--text-secondary);">No cookies found</div>';
+                return;
+            }
+
+            cookies.forEach(cookie => {
+                const [name, value] = cookie.split('=').map(s => s.trim());
+
+                const item = document.createElement('div');
+                item.style.padding = 'var(--spacing-md)';
+                item.style.background = 'var(--bg-tertiary)';
+                item.style.borderRadius = 'var(--radius-md)';
+                item.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <strong style="color: var(--accent-primary);">${name}</strong>
+                            <div style="margin-top: var(--spacing-xs); font-family: monospace; font-size: 0.875rem; color: var(--text-secondary); word-break: break-all;">${value || '(empty)'}</div>
+                        </div>
+                        <button class="btn btn-danger" onclick="deleteCookie('${name}')" style="margin-left: var(--spacing-md);">🗑️</button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+
+            showToast(`Loaded ${cookies.length} cookies`, 'success');
+        }
+
+        function deleteCookie(name) {
+            if (confirm(`Delete cookie "${name}"?`)) {
+                document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+                loadCookies();
+                showToast('Cookie deleted', 'success');
+            }
+        }
+
+        loadCookies();
+    </script>
+</body>
+
+</html>

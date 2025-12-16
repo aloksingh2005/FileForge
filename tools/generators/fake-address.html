@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake Address Generator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🏠 Fake Address Generator</h1>
+                <p class="hero-subtitle">Generate random addresses for testing</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Options</h4>
+                <div class="card-content">
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Number of Addresses</div>
+                        </div>
+                        <input type="number" id="count" value="3" min="1" max="10"
+                            style="width: 100px; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary);">
+                    </div>
+
+                    <button class="btn btn-primary btn-block mt-lg" onclick="generate()">✨ Generate Addresses</button>
+                </div>
+            </div>
+
+            <div id="results" style="display: none;">
+                <div class="card">
+                    <h4 class="card-title">Generated Addresses</h4>
+                    <div class="card-content" id="addressList"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        const streets = ['Main St', 'Oak Ave', 'Maple Dr', 'Park Rd', 'Washington Blvd', 'Cedar Ln', 'Elm St', 'Pine Ave', 'Lake Dr', 'River Rd'];
+        const cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelphia', 'San Antonio', 'San Diego', 'Dallas', 'San Jose'];
+        const states = ['NY', 'CA', 'IL', 'TX', 'AZ', 'PA', 'FL', 'OH', 'NC', 'GA'];
+
+        function generate() {
+            const count = parseInt(document.getElementById('count').value);
+            const results = [];
+
+            for (let i = 0; i < count; i++) {
+                const number = Math.floor(Math.random() * 9999) + 1;
+                const street = streets[Math.floor(Math.random() * streets.length)];
+                const city = cities[Math.floor(Math.random() * cities.length)];
+                const state = states[Math.floor(Math.random() * states.length)];
+                const zip = Math.floor(Math.random() * 90000) + 10000;
+
+                results.push({
+                    street: `${number} ${street}`,
+                    cityState: `${city}, ${state} ${zip}`
+                });
+            }
+
+            const listHTML = results.map((addr, idx) => `
+                <div style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); margin-bottom: var(--spacing-sm);">
+                    <div style="font-weight: 600; margin-bottom: var(--spacing-xs);">Address ${idx + 1}</div>
+                    <div style="font-family: monospace; line-height: 1.6;">
+                        ${addr.street}<br>
+                        ${addr.cityState}
+                    </div>
+                    <button class="btn btn-sm btn-secondary mt-sm" onclick="copyText(\`${addr.street}\\n${addr.cityState}\`)">📋 Copy</button>
+                </div>
+            `).join('');
+
+            document.getElementById('addressList').innerHTML = listHTML;
+            document.getElementById('results').style.display = 'block';
+            showToast('Generated ' + count + ' addresses!', 'success');
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text);
+            showToast('Copied!', 'success');
+        }
+    </script>
+</body>
+
+</html>

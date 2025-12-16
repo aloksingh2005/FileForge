@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary to Decimal Converter - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🔢 Binary ↔ Decimal Converter</h1>
+                <p class="hero-subtitle">Convert between binary and decimal numbers</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Binary to Decimal</h4>
+                <div class="card-content">
+                    <input type="text" id="binaryInput" placeholder="Enter binary (e.g., 1010)" oninput="binaryToDec()"
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem; font-family: monospace;">
+                    <div style="text-align: center; margin-top: var(--spacing-lg); font-size: 2rem; font-weight: 700; color: var(--accent-primary);"
+                        id="decimalOutput">0</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">Decimal to Binary</h4>
+                <div class="card-content">
+                    <input type="number" id="decimalInput" placeholder="Enter decimal (e.g., 10)"
+                        oninput="decToBinary()"
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    <div style="text-align: center; margin-top: var(--spacing-lg); font-size: 2rem; font-weight: 700; color: var(--success); font-family: monospace;"
+                        id="binaryOutput">0</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function binaryToDec() {
+            const binary = document.getElementById('binaryInput').value.trim();
+            if (/^[01]+$/.test(binary)) {
+                const decimal = parseInt(binary, 2);
+                document.getElementById('decimalOutput').textContent = decimal;
+            } else {
+                document.getElementById('decimalOutput').textContent = 'Invalid';
+            }
+        }
+
+        function decToBinary() {
+            const decimal = parseInt(document.getElementById('decimalInput').value);
+            if (!isNaN(decimal) && decimal >= 0) {
+                const binary = decimal.toString(2);
+                document.getElementById('binaryOutput').textContent = binary;
+            } else {
+                document.getElementById('binaryOutput').textContent = 'Invalid';
+            }
+        }
+    </script>
+</body>
+
+</html>

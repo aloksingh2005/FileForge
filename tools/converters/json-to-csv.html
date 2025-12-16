@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON to CSV Converter - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>📄 JSON to CSV Converter</h1>
+                <p class="hero-subtitle">Convert JSON data to CSV format</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Enter JSON</h4>
+                <div class="card-content">
+                    <textarea id="jsonInput" rows="10" placeholder='[{"name":"John","age":30},{"name":"Jane","age":25}]'
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 0.9rem; font-family: monospace; resize: vertical;"></textarea>
+                    <button class="btn btn-primary btn-block mt-md" onclick="convert()">🔄 Convert to CSV</button>
+                </div>
+            </div>
+
+            <div id="resultSection" style="display: none;">
+                <div class="card">
+                    <h4 class="card-title">CSV Output</h4>
+                    <div class="card-content">
+                        <textarea id="csvOutput" readonly rows="10"
+                            style="width: 100%; padding: var(--spacing-md); background: var(--bg-tertiary); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; font-family: monospace; resize: vertical;"></textarea>
+                        <button class="btn btn-success btn-block mt-md" onclick="copyOutput()">📋 Copy CSV</button>
+                        <button class="btn btn-secondary btn-block mt-sm" onclick="downloadCSV()">📥 Download
+                            CSV</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function convert() {
+            const input = document.getElementById('jsonInput').value.trim();
+            if (!input) {
+                showToast('Please enter JSON data', 'warning');
+                return;
+            }
+
+            try {
+                const data = JSON.parse(input);
+                if (!Array.isArray(data)) {
+                    showToast('JSON must be an array of objects', 'error');
+                    return;
+                }
+
+                if (data.length === 0) {
+                    showToast('JSON array is empty', 'warning');
+                    return;
+                }
+
+                // Get headers from first object
+                const headers = Object.keys(data[0]);
+                let csv = headers.join(',') + '\n';
+
+                // Add rows
+                data.forEach(row => {
+                    const values = headers.map(header => {
+                        const value = row[header];
+                        // Escape quotes and wrap in quotes if contains comma
+                        if (value === null || value === undefined) return '';
+                        const str = String(value);
+                        if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+                            return `"${str.replace(/"/g, '""')}"`;
+                        }
+                        return str;
+                    });
+                    csv += values.join(',') + '\n';
+                });
+
+                document.getElementById('csvOutput').value = csv;
+                document.getElementById('resultSection').style.display = 'block';
+                showToast('Converted to CSV!', 'success');
+            } catch (error) {
+                showToast('Invalid JSON: ' + error.message, 'error');
+            }
+        }
+
+        function copyOutput() {
+            const output = document.getElementById('csvOutput');
+            output.select();
+            document.execCommand('copy');
+            showToast('Copied!', 'success');
+        }
+
+        function downloadCSV() {
+            const content = document.getElementById('csvOutput').value;
+            const blob = new Blob([content], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'data.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Downloaded!', 'success');
+        }
+    </script>
+</body>
+
+</html>

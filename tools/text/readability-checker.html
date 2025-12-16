@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Readability Checker - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>📖 Readability Checker</h1>
+                <p class="hero-subtitle">Check text readability and grade level</p>
+            </div>
+
+            <div class="card mb-lg">
+                <div class="card-content">
+                    <textarea id="textInput" rows="12" placeholder="Enter or paste your text here..."
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem; resize: vertical;"></textarea>
+                    <button class="btn btn-primary btn-block mt-md" onclick="analyze()">📊 Analyze Readability</button>
+                </div>
+            </div>
+
+            <div id="resultSection" style="display: none;">
+                <div class="card mb-lg">
+                    <h4 class="card-title">Readability Score</h4>
+                    <div class="card-content text-center">
+                        <div
+                            style="background: var(--bg-tertiary); padding: var(--spacing-xl); border-radius: var(--radius-md);">
+                            <div style="font-size: 3rem; font-weight: 700; color: var(--accent-primary);" id="score">0
+                            </div>
+                            <p style="margin-top: var(--spacing-sm); color: var(--text-secondary);" id="grade">-</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h4 class="card-title">Text Statistics</h4>
+                    <div class="card-content">
+                        <div style="display: grid; gap: var(--spacing-sm);" id="stats"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function analyze() {
+            const text = document.getElementById('textInput').value;
+            if (!text.trim()) {
+                showToast('Please enter text', 'warning');
+                return;
+            }
+
+            const sentences = (text.match(/[.!?]+/g) || []).length;
+            const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+            const syllables = countSyllables(text);
+
+            // Flesch Reading Ease Score
+            const score = 206.835 - 1.015 * (words / sentences) - 84.6 * (syllables / words);
+            const gradeLevel = getGradeLevel(score);
+
+            document.getElementById('score').textContent = Math.round(score);
+            document.getElementById('grade').textContent = gradeLevel;
+
+            document.getElementById('stats').innerHTML = `
+                <div style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); display: flex; justify-content: space-between;">
+                    <strong>Sentences:</strong> <span>${sentences}</span>
+                </div>
+                <div style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); display: flex; justify-content: space-between;">
+                    <strong>Words:</strong> <span>${words}</span>
+                </div>
+                <div style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); display: flex; justify-content: space-between;">
+                    <strong>Syllables:</strong> <span>${syllables}</span>
+                </div>
+                <div style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); display: flex; justify-content: space-between;">
+                    <strong>Avg. Sentence Length:</strong> <span>${(words / sentences).toFixed(1)} words</span>
+                </div>
+                <div style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); display: flex; justify-content: space-between;">
+                    <strong>Avg. Syllables/Word:</strong> <span>${(syllables / words).toFixed(2)}</span>
+                </div>
+            `;
+
+            document.getElementById('resultSection').style.display = 'block';
+            showToast('Analysis complete!', 'success');
+        }
+
+        function countSyllables(text) {
+            const words = text.toLowerCase().replace(/[^a-z\s]/g, '').split(/\s+/);
+            let count = 0;
+            words.forEach(word => {
+                const syllables = word.match(/[aeiouy]{1,2}/g);
+                count += syllables ? syllables.length : 0;
+            });
+            return count;
+        }
+
+        function getGradeLevel(score) {
+            if (score >= 90) return 'Very Easy (5th grade)';
+            if (score >= 80) return 'Easy (6th grade)';
+            if (score >= 70) return 'Fairly Easy (7th grade)';
+            if (score >= 60) return 'Standard (8th-9th grade)';
+            if (score >= 50) return 'Fairly Difficult (10th-12th grade)';
+            if (score >= 30) return 'Difficult (College)';
+            return 'Very Difficult (College graduate)';
+        }
+    </script>
+</body>
+
+</html>

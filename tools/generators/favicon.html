@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favicon Generator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🎨 Favicon Generator</h1>
+                <p class="hero-subtitle">Create favicons from images</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Upload Image</h4>
+                <div class="card-content">
+                    <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="loadImage()">
+                    <button class="btn btn-primary btn-block" onclick="document.getElementById('fileInput').click()">📁
+                        Select Image</button>
+                </div>
+            </div>
+
+            <div id="resultSection" style="display: none;">
+                <div class="card mb-lg">
+                    <h4 class="card-title">Preview</h4>
+                    <div class="card-content text-center">
+                        <div
+                            style="display: flex; gap: var(--spacing-lg); justify-content: center; align-items: center; padding: var(--spacing-xl); background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%); border-radius: var(--radius-lg);">
+                            <div style="text-align: center;">
+                                <canvas id="canvas16" width="16" height="16"
+                                    style="border: 2px solid var(--accent-primary); border-radius: var(--radius-sm); background: white;"></canvas>
+                                <p
+                                    style="margin-top: var(--spacing-xs); font-size: 0.75rem; color: var(--text-secondary);">
+                                    16×16</p>
+                            </div>
+                            <div style="text-align: center;">
+                                <canvas id="canvas32" width="32" height="32"
+                                    style="border: 2px solid var(--accent-primary); border-radius: var(--radius-sm); background: white;"></canvas>
+                                <p
+                                    style="margin-top: var(--spacing-xs); font-size: 0.75rem; color: var(--text-secondary);">
+                                    32×32</p>
+                            </div>
+                            <div style="text-align: center;">
+                                <canvas id="canvas64" width="64" height="64"
+                                    style="border: 2px solid var(--accent-primary); border-radius: var(--radius-md); background: white;"></canvas>
+                                <p
+                                    style="margin-top: var(--spacing-xs); font-size: 0.75rem; color: var(--text-secondary);">
+                                    64×64</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <button class="btn btn-success btn-block mb-sm" onclick="download(16)">📥 Download
+                            16×16</button>
+                        <button class="btn btn-success btn-block mb-sm" onclick="download(32)">📥 Download
+                            32×32</button>
+                        <button class="btn btn-success btn-block" onclick="download(64)">📥 Download 64×64</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function loadImage() {
+            const file = document.getElementById('fileInput').files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    [16, 32, 64].forEach(size => {
+                        const canvas = document.getElementById(`canvas${size}`);
+                        const ctx = canvas.getContext('2d');
+                        ctx.imageSmoothingEnabled = true;
+                        ctx.imageSmoothingQuality = 'high';
+                        ctx.drawImage(img, 0, 0, size, size);
+                    });
+
+                    document.getElementById('resultSection').style.display = 'block';
+                    showToast('Favicons generated!', 'success');
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function download(size) {
+            const canvas = document.getElementById(`canvas${size}`);
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `favicon-${size}x${size}.png`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast(`Downloaded ${size}×${size} favicon!`, 'success');
+            });
+        }
+    </script>
+</body>
+
+</html>

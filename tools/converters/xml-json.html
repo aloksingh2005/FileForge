@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XML to JSON - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🔄 XML to JSON Converter</h1>
+                <p class="hero-subtitle">Convert XML to JSON format</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">XML Input</h4>
+                <div class="card-content">
+                    <textarea id="xml" rows="12" placeholder="<root><name>John</name><age>30</age></root>"
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 0.9rem; font-family: monospace; resize: vertical;"></textarea>
+                    <button class="btn btn-primary btn-block mt-md" onclick="convert()">🔄 Convert to JSON</button>
+                </div>
+            </div>
+
+            <div id="resultSection" style="display: none;">
+                <div class="card">
+                    <h4 class="card-title">JSON Output</h4>
+                    <div class="card-content">
+                        <textarea id="json" readonly rows="12"
+                            style="width: 100%; padding: var(--spacing-md); background: linear-gradient(135deg, #f093fb15 0%, #f5576c15 100%); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; font-family: monospace; resize: vertical;"></textarea>
+                        <button class="btn btn-success btn-block mt-md" onclick="copyOutput()">📋 Copy JSON</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function convert() {
+            const xmlText = document.getElementById('xml').value.trim();
+            if (!xmlText) {
+                showToast('Please enter XML', 'warning');
+                return;
+            }
+
+            try {
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+
+                if (xmlDoc.getElementsByTagName('parsererror').length > 0) {
+                    throw new Error('Invalid XML');
+                }
+
+                const json = xmlToJson(xmlDoc);
+                document.getElementById('json').value = JSON.stringify(json, null, 2);
+                document.getElementById('resultSection').style.display = 'block';
+                showToast('Converted to JSON!', 'success');
+            } catch (error) {
+                showToast('Error: ' + error.message, 'error');
+            }
+        }
+
+        function xmlToJson(xml) {
+            let obj = {};
+
+            if (xml.nodeType === 1) {
+                if (xml.attributes.length > 0) {
+                    obj['@attributes'] = {};
+                    for (let j = 0; j < xml.attributes.length; j++) {
+                        const attribute = xml.attributes.item(j);
+                        obj['@attributes'][attribute.nodeName] = attribute.nodeValue;
+                    }
+                }
+            } else if (xml.nodeType === 3) {
+                obj = xml.nodeValue.trim();
+            }
+
+            if (xml.hasChildNodes()) {
+                for (let i = 0; i < xml.childNodes.length; i++) {
+                    const item = xml.childNodes.item(i);
+                    const nodeName = item.nodeName;
+                    if (typeof (obj[nodeName]) === 'undefined') {
+                        obj[nodeName] = xmlToJson(item);
+                    } else {
+                        if (typeof (obj[nodeName].push) === 'undefined') {
+                            const old = obj[nodeName];
+                            obj[nodeName] = [];
+                            obj[nodeName].push(old);
+                        }
+                        obj[nodeName].push(xmlToJson(item));
+                    }
+                }
+            }
+            return obj;
+        }
+
+        function copyOutput() {
+            const output = document.getElementById('json');
+            output.select();
+            document.execCommand('copy');
+            showToast('Copied!', 'success');
+        }
+    </script>
+</body>
+
+</html>

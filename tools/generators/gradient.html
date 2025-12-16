@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gradient Generator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🌈 Gradient Generator</h1>
+                <p class="hero-subtitle">Create CSS gradients with live preview</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Gradient Settings</h4>
+                <div class="card-content">
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Color 1</div>
+                        </div>
+                        <input type="color" id="color1" value="#667eea" oninput="update()"
+                            style="width: 80px; height: 50px;">
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Color 2</div>
+                        </div>
+                        <input type="color" id="color2" value="#764ba2" oninput="update()"
+                            style="width: 80px; height: 50px;">
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Direction</div>
+                        </div>
+                        <select id="direction" onchange="update()"
+                            style="padding: 0.75rem; border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); border: 2px solid var(--bg-tertiary);">
+                            <option value="to right">Left to Right</option>
+                            <option value="to left">Right to Left</option>
+                            <option value="to bottom">Top to Bottom</option>
+                            <option value="to top">Bottom to Top</option>
+                            <option value="135deg" selected>Diagonal ↘</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Preview</h4>
+                <div class="card-content">
+                    <div id="preview" style="height: 200px; border-radius: var(--radius-md);"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">CSS Code</h4>
+                <div class="card-content">
+                    <textarea id="cssOutput" readonly rows="3"
+                        style="width: 100%; padding: var(--spacing-md); background: var(--bg-secondary); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); font-family: monospace; color: var(--text-primary); font-size: 0.9rem;"></textarea>
+                    <button class="btn btn-success btn-block mt-md" onclick="copyCSS()">📋 Copy CSS</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function update() {
+            const color1 = document.getElementById('color1').value;
+            const color2 = document.getElementById('color2').value;
+            const direction = document.getElementById('direction').value;
+
+            const gradient = `linear-gradient(${direction}, ${color1}, ${color2})`;
+            document.getElementById('preview').style.background = gradient;
+            document.getElementById('cssOutput').value = `background: ${gradient};`;
+        }
+
+        function copyCSS() {
+            const css = document.getElementById('cssOutput');
+            css.select();
+            document.execCommand('copy');
+            showToast('CSS copied!', 'success');
+        }
+
+        update();
+    </script>
+</body>
+
+</html>

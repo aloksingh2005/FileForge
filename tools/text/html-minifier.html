@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Minifier - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>⚡ HTML Minifier</h1>
+                <p class="hero-subtitle">Minify HTML code by removing whitespace</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">HTML Input</h4>
+                <div class="card-content">
+                    <textarea id="input" rows="12" placeholder="Paste your HTML here..."
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 0.9rem; font-family: monospace; resize: vertical;"></textarea>
+                    <button class="btn btn-primary btn-block mt-md" onclick="minify()">⚡ Minify HTML</button>
+                </div>
+            </div>
+
+            <div id="resultSection" style="display: none;">
+                <div class="card">
+                    <h4 class="card-title">Minified HTML</h4>
+                    <div class="card-content">
+                        <textarea id="output" readonly rows="10"
+                            style="width: 100%; padding: var(--spacing-md); background: var(--bg-tertiary); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; font-family: monospace; resize: vertical;"></textarea>
+                        <div
+                            style="display: flex; justify-content: space-between; margin-top: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-secondary); border-radius: var(--radius-md);">
+                            <div><strong>Original:</strong> <span id="originalSize">0</span> bytes</div>
+                            <div><strong>Minified:</strong> <span id="minifiedSize">0</span> bytes</div>
+                            <div style="color: var(--success); font-weight: 700;"><span id="saved">0</span>% saved</div>
+                        </div>
+                        <button class="btn btn-success btn-block mt-md" onclick="copyOutput()">📋 Copy Minified
+                            HTML</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function minify() {
+            const input = document.getElementById('input').value;
+            if (!input.trim()) {
+                showToast('Please enter HTML', 'warning');
+                return;
+            }
+
+            // Simple minification: remove extra whitespace
+            const minified = input
+                .replace(/>\s+</g, '><')  // Remove space between tags
+                .replace(/\s{2,}/g, ' ')  // Replace multiple spaces with single space
+                .trim();
+
+            const originalSize = new Blob([input]).size;
+            const minifiedSize = new Blob([minified]).size;
+            const saved = Math.round(((originalSize - minifiedSize) / originalSize) * 100);
+
+            document.getElementById('output').value = minified;
+            document.getElementById('originalSize').textContent = originalSize;
+            document.getElementById('minifiedSize').textContent = minifiedSize;
+            document.getElementById('saved').textContent = saved;
+            document.getElementById('resultSection').style.display = 'block';
+            showToast('HTML minified!', 'success');
+        }
+
+        function copyOutput() {
+            const output = document.getElementById('output');
+            output.select();
+            document.execCommand('copy');
+            showToast('Copied!', 'success');
+        }
+    </script>
+</body>
+
+</html>

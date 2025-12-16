@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Palette Generator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🎨 Color Palette Generator</h1>
+                <p class="hero-subtitle">Generate beautiful color palettes</p>
+            </div>
+
+            <div class="card mb-lg">
+                <div class="card-content text-center">
+                    <button class="btn btn-primary btn-lg" onclick="generate()">✨ Generate Palette</button>
+                </div>
+            </div>
+
+            <div id="palette"
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--spacing-md);">
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function randomColor() {
+            return '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+        }
+
+        function generate() {
+            const palette = document.getElementById('palette');
+            palette.innerHTML = '';
+
+            for (let i = 0; i < 5; i++) {
+                const color = randomColor();
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div style="height: 150px; background: ${color}; border-radius: var(--radius-md) var(--radius-md) 0 0;"></div>
+                    <div class="card-content text-center">
+                        <div style="font-family: monospace; font-weight: 700; font-size: 1.1rem; margin-bottom: var(--spacing-sm);">${color.toUpperCase()}</div>
+                        <button class="btn btn-sm btn-secondary" onclick="copy('${color}')">📋 Copy</button>
+                    </div>
+                `;
+                palette.appendChild(card);
+            }
+            showToast('Palette generated!', 'success');
+        }
+
+        function copy(color) {
+            navigator.clipboard.writeText(color);
+            showToast('Copied ' + color, 'success');
+        }
+
+        generate();
+    </script>
+</body>
+
+</html>

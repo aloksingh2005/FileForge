@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🧮 Scientific Calculator</h1>
+                <p class="hero-subtitle">Advanced mathematical calculator</p>
+            </div>
+
+            <div class="card">
+                <div class="card-content">
+                    <input type="text" id="display" readonly
+                        style="width: 100%; padding: var(--spacing-lg); font-size: 1.8rem; text-align: right; background: var(--bg-tertiary); border: none; border-radius: var(--radius-md); margin-bottom: var(--spacing-md); font-family: monospace; color: var(--text-primary);"
+                        value="0">
+
+                    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--spacing-sm);">
+                        <button onclick="clearDisplay()" class="calc-btn calc-btn-secondary"
+                            style="grid-column: span 2;">C</button>
+                        <button onclick="deleteDigit()" class="calc-btn calc-btn-secondary">⌫</button>
+                        <button onclick="appendOperator('**')" class="calc-btn calc-btn-operator">xʸ</button>
+                        <button onclick="appendOperator('%')" class="calc-btn calc-btn-operator">%</button>
+
+                        <button onclick="appendFunction('sin(')" class="calc-btn calc-btn-func">sin</button>
+                        <button onclick="appendNumber('7')" class="calc-btn">7</button>
+                        <button onclick="appendNumber('8')" class="calc-btn">8</button>
+                        <button onclick="appendNumber('9')" class="calc-btn">9</button>
+                        <button onclick="appendOperator('/')" class="calc-btn calc-btn-operator">÷</button>
+
+                        <button onclick="appendFunction('cos(')" class="calc-btn calc-btn-func">cos</button>
+                        <button onclick="appendNumber('4')" class="calc-btn">4</button>
+                        <button onclick="appendNumber('5')" class="calc-btn">5</button>
+                        <button onclick="appendNumber('6')" class="calc-btn">6</button>
+                        <button onclick="appendOperator('*')" class="calc-btn calc-btn-operator">×</button>
+
+                        <button onclick="appendFunction('tan(')" class="calc-btn calc-btn-func">tan</button>
+                        <button onclick="appendNumber('1')" class="calc-btn">1</button>
+                        <button onclick="appendNumber('2')" class="calc-btn">2</button>
+                        <button onclick="appendNumber('3')" class="calc-btn">3</button>
+                        <button onclick="appendOperator('-')" class="calc-btn calc-btn-operator">−</button>
+
+                        <button onclick="appendFunction('sqrt(')" class="calc-btn calc-btn-func">√</button>
+                        <button onclick="appendNumber('0')" class="calc-btn" style="grid-column: span 2;">0</button>
+                        <button onclick="appendNumber('.')" class="calc-btn">.</button>
+                        <button onclick="appendOperator('+')" class="calc-btn calc-btn-operator">+</button>
+
+                        <button onclick="appendFunction('log(')" class="calc-btn calc-btn-func">log</button>
+                        <button onclick="appendString('(')" class="calc-btn">(</button>
+                        <button onclick="appendString(')')" class="calc-btn">)</button>
+                        <button onclick="appendPi()" class="calc-btn calc-btn-func">π</button>
+                        <button onclick="calculate()" class="calc-btn calc-btn-equals">=</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        .calc-btn {
+            padding: var(--spacing-lg);
+            font-size: 1.1rem;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--bg-tertiary);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .calc-btn:hover {
+            background: var(--bg-tertiary);
+            transform: translateY(-2px);
+        }
+
+        .calc-btn-secondary {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+
+        .calc-btn-operator {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+        }
+
+        .calc-btn-equals {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .calc-btn-func {
+            background: var(--warning);
+            color: white;
+            border-color: var(--warning);
+            font-size: 0.95rem;
+        }
+    </style>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        let display = document.getElementById('display');
+        let currentValue = '0';
+
+        function updateDisplay() {
+            display.value = currentValue;
+        }
+
+        function appendNumber(num) {
+            if (currentValue === '0') {
+                currentValue = num;
+            } else {
+                currentValue += num;
+            }
+            updateDisplay();
+        }
+
+        function appendOperator(op) {
+            currentValue += op;
+            updateDisplay();
+        }
+
+        function appendString(str) {
+            currentValue += str;
+            updateDisplay();
+        }
+
+        function appendFunction(func) {
+            if (currentValue === '0') {
+                currentValue = func;
+            } else {
+                currentValue += func;
+            }
+            updateDisplay();
+        }
+
+        function appendPi() {
+            if (currentValue === '0') {
+                currentValue = 'Math.PI';
+            } else {
+                currentValue += 'Math.PI';
+            }
+            updateDisplay();
+        }
+
+        function clearDisplay() {
+            currentValue = '0';
+            updateDisplay();
+        }
+
+        function deleteDigit() {
+            currentValue = currentValue.slice(0, -1) || '0';
+            updateDisplay();
+        }
+
+        function calculate() {
+            try {
+                // Replace functions for evaluation
+                let expr = currentValue
+                    .replace(/sin\(/g, 'Math.sin(')
+                    .replace(/cos\(/g, 'Math.cos(')
+                    .replace(/tan\(/g, 'Math.tan(')
+                    .replace(/sqrt\(/g, 'Math.sqrt(')
+                    .replace(/log\(/g, 'Math.log10(');
+
+                currentValue = eval(expr).toString();
+                updateDisplay();
+            } catch (error) {
+                currentValue = 'Error';
+                updateDisplay();
+                setTimeout(() => {
+                    currentValue = '0';
+                    updateDisplay();
+                }, 1500);
+            }
+        }
+    </script>
+</body>
+
+</html>

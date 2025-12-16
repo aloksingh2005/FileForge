@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Split - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>✂️ PDF Split</h1>
+                <p class="hero-subtitle">Split PDF into separate pages</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Upload PDF</h4>
+                <div class="card-content">
+                    <input type="file" id="fileInput" accept=".pdf" style="display: none;" onchange="loadPDF()">
+                    <button class="btn btn-primary btn-block" onclick="document.getElementById('fileInput').click()">📁
+                        Select PDF File</button>
+                </div>
+            </div>
+
+            <div id="statusSection" style="display: none;">
+                <div class="card mb-lg">
+                    <h4 class="card-title">PDF Info</h4>
+                    <div class="card-content text-center">
+                        <div
+                            style="background: var(--bg-tertiary); padding: var(--spacing-lg); border-radius: var(--radius-md);">
+                            <strong id="pageCount">0</strong> pages found
+                        </div>
+                        <button class="btn btn-success btn-block mt-lg" onclick="splitPDF()">✂️ Split into Individual
+                            Pages</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="downloadSection" style="display: none;">
+                <div class="card">
+                    <h4 class="card-title">Download Pages</h4>
+                    <div class="card-content">
+                        <div id="downloadLinks" style="display: grid; gap: var(--spacing-sm);"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        const { PDFDocument } = PDFLib;
+        let pdfBytes;
+
+        async function loadPDF() {
+            const file = document.getElementById('fileInput').files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                pdfBytes = new Uint8Array(e.target.result);
+                const pdfDoc = await PDFDocument.load(pdfBytes);
+                const pageCount = pdfDoc.getPageCount();
+
+                document.getElementById('pageCount').textContent = pageCount;
+                document.getElementById('statusSection').style.display = 'block';
+                showToast(`PDF loaded: ${pageCount} pages`, 'success');
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        async function splitPDF() {
+            const pdfDoc = await PDFDocument.load(pdfBytes);
+            const pageCount = pdfDoc.getPageCount();
+            const links = document.getElementById('downloadLinks');
+            links.innerHTML = '';
+
+            showToast('Splitting PDF...', 'info');
+
+            for (let i = 0; i < pageCount; i++) {
+                const newPdf = await PDFDocument.create();
+                const [copiedPage] = await newPdf.copyPages(pdfDoc, [i]);
+                newPdf.addPage(copiedPage);
+
+                const pdfBytesResult = await newPdf.save();
+                const blob = new Blob([pdfBytesResult], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+
+                const linkBtn = document.createElement('button');
+                linkBtn.className = 'btn btn-secondary btn-block';
+                linkBtn.textContent = `📄 Download Page ${i + 1}`;
+                linkBtn.onclick = () => {
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `page-${i + 1}.pdf`;
+                    a.click();
+                    showToast(`Downloaded page ${i + 1}`, 'success');
+                };
+                links.appendChild(linkBtn);
+            }
+
+            document.getElementById('downloadSection').style.display = 'block';
+            showToast('PDF split complete!', 'success');
+        }
+    </script>
+</body>
+
+</html>

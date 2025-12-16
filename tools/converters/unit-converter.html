@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit Converter - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>📏 Unit Converter</h1>
+                <p class="hero-subtitle">Convert between different units of measurement</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Convert</h4>
+                <div class="card-content">
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Category</div>
+                        </div>
+                        <select id="category" onchange="updateUnits()"
+                            style="padding: 0.75rem; border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); border: 2px solid var(--bg-tertiary); width: 100%;">
+                            <option value="length">Length</option>
+                            <option value="weight">Weight</option>
+                            <option value="temperature">Temperature</option>
+                            <option value="time">Time</option>
+                        </select>
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Value</div>
+                        </div>
+                        <input type="number" id="value" value="1" oninput="convert()"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">From</div>
+                        </div>
+                        <select id="fromUnit" onchange="convert()"
+                            style="padding: 0.75rem; border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); border: 2px solid var(--bg-tertiary); width: 100%;"></select>
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">To</div>
+                        </div>
+                        <select id="toUnit" onchange="convert()"
+                            style="padding: 0.75rem; border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); border: 2px solid var(--bg-tertiary); width: 100%;"></select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">Result</h4>
+                <div class="card-content">
+                    <div
+                        style="text-align: center; background: var(--bg-tertiary); padding: var(--spacing-xl); border-radius: var(--radius-md);">
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-primary);" id="result">0
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        const units = {
+            length: {
+                meter: 1,
+                kilometer: 0.001,
+                centimeter: 100,
+                millimeter: 1000,
+                mile: 0.000621371,
+                yard: 1.09361,
+                foot: 3.28084,
+                inch: 39.3701
+            },
+            weight: {
+                kilogram: 1,
+                gram: 1000,
+                milligram: 1000000,
+                pound: 2.20462,
+                ounce: 35.274
+            },
+            temperature: {
+                celsius: 'C',
+                fahrenheit: 'F',
+                kelvin: 'K'
+            },
+            time: {
+                second: 1,
+                minute: 1 / 60,
+                hour: 1 / 3600,
+                day: 1 / 86400,
+                week: 1 / 604800
+            }
+        };
+
+        function updateUnits() {
+            const category = document.getElementById('category').value;
+            const fromUnit = document.getElementById('fromUnit');
+            const toUnit = document.getElementById('toUnit');
+
+            fromUnit.innerHTML = '';
+            toUnit.innerHTML = '';
+
+            Object.keys(units[category]).forEach(unit => {
+                fromUnit.innerHTML += `<option value="${unit}">${unit.charAt(0).toUpperCase() + unit.slice(1)}</option>`;
+                toUnit.innerHTML += `<option value="${unit}">${unit.charAt(0).toUpperCase() + unit.slice(1)}</option>`;
+            });
+
+            convert();
+        }
+
+        function convert() {
+            const category = document.getElementById('category').value;
+            const value = parseFloat(document.getElementById('value').value) || 0;
+            const from = document.getElementById('fromUnit').value;
+            const to = document.getElementById('toUnit').value;
+
+            let result;
+
+            if (category === 'temperature') {
+                result = convertTemperature(value, from, to);
+            } else {
+                const baseValue = value / units[category][from];
+                result = baseValue * units[category][to];
+            }
+
+            document.getElementById('result').textContent = result.toFixed(4);
+        }
+
+        function convertTemperature(value, from, to) {
+            let celsius;
+            if (from === 'celsius') celsius = value;
+            else if (from === 'fahrenheit') celsius = (value - 32) * 5 / 9;
+            else celsius = value - 273.15;
+
+            if (to === 'celsius') return celsius;
+            else if (to === 'fahrenheit') return celsius * 9 / 5 + 32;
+            else return celsius + 273.15;
+        }
+
+        updateUnits();
+    </script>
+</body>
+
+</html>

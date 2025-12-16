@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Image to PDF - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🖼️ Add Image to PDF</h1>
+                <p class="hero-subtitle">Add images to your PDF</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Upload PDF</h4>
+                <div class="card-content">
+                    <input type="file" id="pdfInput" accept=".pdf" style="display: none;" onchange="loadPDF()">
+                    <button class="btn btn-primary btn-block" onclick="document.getElementById('pdfInput').click()">📁
+                        Select PDF File</button>
+                </div>
+            </div>
+
+            <div id="editSection" style="display: none;">
+                <div class="card mb-lg">
+                    <h4 class="card-title">Upload Image</h4>
+                    <div class="card-content">
+                        <input type="file" id="imageInput" accept="image/*" style="display: none;"
+                            onchange="loadImage()">
+                        <button class="btn btn-secondary btn-block"
+                            onclick="document.getElementById('imageInput').click()">🖼️ Select Image</button>
+                        <div id="imagePreview"
+                            style="display: none; margin-top: var(--spacing-md); text-align: center;">
+                            <img id="preview"
+                                style="max-width: 200px; border-radius: var(--radius-md); border: 2px solid var(--bg-tertiary);">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="addSection" style="display: none;">
+                    <div class="card mb-lg">
+                        <h4 class="card-title">Image Options</h4>
+                        <div class="card-content">
+                            <div class="settings-row">
+                                <div>
+                                    <div class="settings-label">Position</div>
+                                </div>
+                                <select id="position"
+                                    style="width: 100%; padding: 0.75rem; border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); border: 2px solid var(--bg-tertiary);">
+                                    <option value="center">Center</option>
+                                    <option value="top-left">Top Left</option>
+                                    <option value="top-right">Top Right</option>
+                                    <option value="bottom-left">Bottom Left</option>
+                                    <option value="bottom-right">Bottom Right</option>
+                                </select>
+                            </div>
+
+                            <button class="btn btn-success btn-block mt-lg" onclick="addImageToPDF()">➕ Add Image to
+                                PDF</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        const { PDFDocument } = PDFLib;
+        let pdfBytes;
+        let imageBytes;
+
+        async function loadPDF() {
+            const file = document.getElementById('pdfInput').files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                pdfBytes = new Uint8Array(e.target.result);
+                document.getElementById('editSection').style.display = 'block';
+                showToast('PDF loaded!', 'success');
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function loadImage() {
+            const file = document.getElementById('imageInput').files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imageBytes = e.target.result;
+                document.getElementById('preview').src = e.target.result;
+                document.getElementById('imagePreview').style.display = 'block';
+                document.getElementById('addSection').style.display = 'block';
+                showToast('Image loaded!', 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function addImageToPDF() {
+            const position = document.getElementById('position').value;
+
+            const pdfDoc = await PDFDocument.load(pdfBytes);
+            const imageExtension = document.getElementById('imageInput').files[0].type.includes('png') ? 'png' : 'jpg';
+
+            const image = imageExtension === 'png'
+                ? await pdfDoc.embedPng(imageBytes)
+                : await pdfDoc.embedJpg(imageBytes);
+
+            const firstPage = pdfDoc.getPages()[0];
+            const { width, height } = firstPage.getSize();
+
+            const imageWidth = 200;
+            const imageHeight = (image.height / image.width) * imageWidth;
+
+            let x, y;
+            switch (position) {
+                case 'center':
+                    x = (width - imageWidth) / 2;
+                    y = (height - imageHeight) / 2;
+                    break;
+                case 'top-left': x = 50; y = height - imageHeight - 50; break;
+                case 'top-right': x = width - imageWidth - 50; y = height - imageHeight - 50; break;
+                case 'bottom-left': x = 50; y = 50; break;
+                case 'bottom-right': x = width - imageWidth - 50; y = 50; break;
+            }
+
+            firstPage.drawImage(image, {
+                x: x,
+                y: y,
+                width: imageWidth,
+                height: imageHeight
+            });
+
+            const pdfBytesResult = await pdfDoc.save();
+            const blob = new Blob([pdfBytesResult], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'image-added.pdf';
+            a.click();
+            URL.revokeObjectURL(url);
+
+            showToast('Image added to PDF!', 'success');
+        }
+    </script>
+</body>
+
+</html>

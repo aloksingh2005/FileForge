@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regex Tester - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🔍 Regex Tester</h1>
+                <p class="hero-subtitle">Test and debug regular expressions</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Regex Pattern</h4>
+                <div class="card-content">
+                    <input type="text" id="regex" placeholder="^[a-z0-9]+$" oninput="test()"
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem; font-family: monospace;">
+                    <div style="margin-top: var(--spacing-md);">
+                        <label><input type="checkbox" id="global" onchange="test()"> Global (g)</label>
+                        <label style="margin-left: var(--spacing-md);"><input type="checkbox" id="ignoreCase"
+                                onchange="test()"> Ignore Case (i)</label>
+                        <label style="margin-left: var(--spacing-md);"><input type="checkbox" id="multiline"
+                                onchange="test()"> Multiline (m)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Test String</h4>
+                <div class="card-content">
+                    <textarea id="testString" rows="8" placeholder="Enter text to test against regex..."
+                        oninput="test()"
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem; resize: vertical;"></textarea>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">Results</h4>
+                <div class="card-content">
+                    <div id="results"
+                        style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); min-height: 100px;">
+                        <div style="text-align: center; color: var(--text-secondary);">Enter a regex pattern and test
+                            string</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function test() {
+            const pattern = document.getElementById('regex').value;
+            const testString = document.getElementById('testString').value;
+            const results = document.getElementById('results');
+
+            if (!pattern) {
+                results.innerHTML = '<div style="text-align: center; color: var(--text-secondary);">Enter a regex pattern</div>';
+                return;
+            }
+
+            try {
+                let flags = '';
+                if (document.getElementById('global').checked) flags += 'g';
+                if (document.getElementById('ignoreCase').checked) flags += 'i';
+                if (document.getElementById('multiline').checked) flags += 'm';
+
+                const regex = new RegExp(pattern, flags);
+                const matches = testString.match(regex);
+
+                let html = '';
+                if (matches && matches.length > 0) {
+                    html += `<div style="color: var(--success); font-weight: 700; margin-bottom: var(--spacing-md);">✓ ${matches.length} match(es) found</div>`;
+                    html += '<div style="font-weight: 600; margin-bottom: var(--spacing-sm);">Matches:</div>';
+                    matches.forEach((match, idx) => {
+                        html += `<div style="padding: var(--spacing-sm); background: var(--bg-secondary); border-radius: var(--radius-sm); margin-bottom: var(--spacing-xs); font-family: monospace;">${idx + 1}. "${match}"</div>`;
+                    });
+                } else {
+                    html = '<div style="color: var(--warning); font-weight: 700;">No matches found</div>';
+                }
+
+                results.innerHTML = html;
+            } catch (error) {
+                results.innerHTML = `<div style="color: var(--danger); font-weight: 700;">Error: ${error.message}</div>`;
+            }
+        }
+    </script>
+</body>
+
+</html>

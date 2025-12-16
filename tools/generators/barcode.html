@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barcode Generator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>📊 Barcode Generator</h1>
+                <p class="hero-subtitle">Generate barcodes from text or numbers</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Enter Data</h4>
+                <div class="card-content">
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Barcode Value</div>
+                        </div>
+                        <input type="text" id="barcodeInput" placeholder="123456789" value="123456789"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary);">
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Format</div>
+                        </div>
+                        <select id="format"
+                            style="padding: 0.75rem; border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); border: 2px solid var(--bg-tertiary);">
+                            <option value="CODE128" selected>CODE128</option>
+                            <option value="CODE39">CODE39</option>
+                            <option value="EAN13">EAN13</option>
+                            <option value="UPC">UPC</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-primary btn-block mt-lg" onclick="generate()">📊 Generate Barcode</button>
+                </div>
+            </div>
+
+            <div id="resultSection" style="display: none;">
+                <div class="card">
+                    <h4 class="card-title">Your Barcode</h4>
+                    <div class="card-content text-center">
+                        <svg id="barcode"></svg>
+                        <br>
+                        <button class="btn btn-success mt-lg" onclick="downloadBarcode()">📥 Download</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function generate() {
+            const input = document.getElementById('barcodeInput').value.trim();
+            const format = document.getElementById('format').value;
+
+            if (!input) {
+                showToast('Please enter a value', 'warning');
+                return;
+            }
+
+            try {
+                JsBarcode("#barcode", input, {
+                    format: format,
+                    lineColor: "#000",
+                    width: 2,
+                    height: 100,
+                    displayValue: true
+                });
+
+                document.getElementById('resultSection').style.display = 'block';
+                showToast('Barcode generated!', 'success');
+            } catch (error) {
+                showToast('Error: ' + error.message, 'error');
+            }
+        }
+
+        function downloadBarcode() {
+            const svg = document.getElementById('barcode');
+            const svgData = new XMLSerializer().serializeToString(svg);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+
+            img.onload = () => {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                canvas.toBlob((blob) => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'barcode.png';
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    showToast('Downloaded!', 'success');
+                });
+            };
+            img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
+        }
+    </script>
+</body>
+
+</html>

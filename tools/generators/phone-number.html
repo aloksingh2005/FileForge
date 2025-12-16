@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone Number Generator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>📱 Phone Number Generator</h1>
+                <p class="hero-subtitle">Generate random phone numbers</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Generate Options</h4>
+                <div class="card-content">
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Country</div>
+                        </div>
+                        <select id="country"
+                            style="width: 100%; padding: 0.75rem; border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); border: 2px solid var(--bg-tertiary);">
+                            <option value="in">India (+91)</option>
+                            <option value="us">USA (+1)</option>
+                            <option value="uk">UK (+44)</option>
+                        </select>
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Number of Phone Numbers</div>
+                        </div>
+                        <input type="number" id="count" value="10" min="1" max="100"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+
+                    <button class="btn btn-primary btn-block mt-lg" onclick="generate()">📱 Generate Numbers</button>
+                </div>
+            </div>
+
+            <div id="resultSection" style="display: none;">
+                <div class="card">
+                    <h4 class="card-title">Generated Phone Numbers</h4>
+                    <div class="card-content">
+                        <textarea id="output" readonly rows="15"
+                            style="width: 100%; padding: var(--spacing-md); background: var(--bg-tertiary); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.95rem; font-family: monospace; resize: vertical;"></textarea>
+                        <button class="btn btn-success btn-block mt-md" onclick="copyOutput()">📋 Copy All
+                            Numbers</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function generate() {
+            const country = document.getElementById('country').value;
+            const count = parseInt(document.getElementById('count').value) || 10;
+            const numbers = [];
+
+            for (let i = 0; i < count; i++) {
+                let number;
+                switch (country) {
+                    case 'in':
+                        const digit = Math.floor(Math.random() * 4) + 6;
+                        number = `+91 ${digit}${Math.random().toString().slice(2, 11)}`;
+                        break;
+                    case 'us':
+                        const area = Math.floor(Math.random() * 900) + 100;
+                        const exchange = Math.floor(Math.random() * 900) + 100;
+                        const subscriber = Math.floor(Math.random() * 9000) + 1000;
+                        number = `+1 (${area}) ${exchange}-${subscriber}`;
+                        break;
+                    case 'uk':
+                        number = `+44 ${Math.random().toString().slice(2, 13)}`;
+                        break;
+                }
+                numbers.push(number);
+            }
+
+            document.getElementById('output').value = numbers.join('\n');
+            document.getElementById('resultSection').style.display = 'block';
+            showToast(`Generated ${count} phone numbers!`, 'success');
+        }
+
+        function copyOutput() {
+            const output = document.getElementById('output');
+            output.select();
+            document.execCommand('copy');
+            showToast('Copied!', 'success');
+        }
+
+        generate();
+    </script>
+</body>
+
+</html>

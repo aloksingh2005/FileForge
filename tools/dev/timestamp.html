@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timestamp Converter - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>⏰ Timestamp Converter</h1>
+                <p class="hero-subtitle">Convert between Unix timestamp and human-readable date</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Current Timestamp</h4>
+                <div class="card-content text-center">
+                    <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-primary); font-family: monospace;"
+                        id="currentTimestamp">0</div>
+                    <div style="font-size: 1.1rem; color: var(--text-secondary); margin-top: var(--spacing-sm);"
+                        id="currentDate">-</div>
+                    <button class="btn btn-sm btn-secondary mt-md" onclick="copyTimestamp()">📋 Copy Timestamp</button>
+                </div>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Timestamp to Date</h4>
+                <div class="card-content">
+                    <input type="number" id="timestampInput" placeholder="1234567890" oninput="timestampToDate()"
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem; font-family: monospace;">
+                    <div id="dateOutput"
+                        style="margin-top: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); font-size: 1.1rem; text-align: center;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">Date to Timestamp</h4>
+                <div class="card-content">
+                    <input type="datetime-local" id="dateInput" oninput="dateToTimestamp()"
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem;">
+                    <div id="timestampOutput"
+                        style="margin-top: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); font-size: 1.5rem; text-align: center; font-family: monospace; font-weight: 700;">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        // Update current timestamp every second
+        setInterval(() => {
+            const now = Math.floor(Date.now() / 1000);
+            document.getElementById('currentTimestamp').textContent = now;
+            document.getElementById('currentDate').textContent = new Date().toString();
+        }, 1000);
+
+        function timestampToDate() {
+            const timestamp = parseInt(document.getElementById('timestampInput').value);
+            if (timestamp) {
+                const date = new Date(timestamp * 1000);
+                document.getElementById('dateOutput').textContent = date.toString();
+            } else {
+                document.getElementById('dateOutput').textContent = '';
+            }
+        }
+
+        function dateToTimestamp() {
+            const dateValue = document.getElementById('dateInput').value;
+            if (dateValue) {
+                const timestamp = Math.floor(new Date(dateValue).getTime() / 1000);
+                document.getElementById('timestampOutput').textContent = timestamp;
+            } else {
+                document.getElementById('timestampOutput').textContent = '';
+            }
+        }
+
+        function copyTimestamp() {
+            const timestamp = document.getElementById('currentTimestamp').textContent;
+            navigator.clipboard.writeText(timestamp);
+            showToast('Copied!', 'success');
+        }
+    </script>
+</body>
+
+</html>

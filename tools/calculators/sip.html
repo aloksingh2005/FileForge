@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIP Calculator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>📈 SIP Calculator</h1>
+                <p class="hero-subtitle">Calculate Systematic Investment Plan returns</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Investment Details</h4>
+                <div class="card-content">
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Monthly Investment (₹)</div>
+                        </div>
+                        <input type="number" id="monthly" value="5000" oninput="calculate()"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Expected Return (% per annum)</div>
+                        </div>
+                        <input type="number" id="return" value="12" step="0.1" oninput="calculate()"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Time Period (years)</div>
+                        </div>
+                        <input type="number" id="years" value="10" min="1" oninput="calculate()"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">Returns Summary</h4>
+                <div class="card-content">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md);">
+                        <div
+                            style="background: var(--bg-tertiary); padding: var(--spacing-lg); border-radius: var(--radius-md); text-align: center;">
+                            <div
+                                style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: var(--spacing-xs);">
+                                Total Investment</div>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--warning);">₹ <span
+                                    id="invested">0</span></div>
+                        </div>
+                        <div
+                            style="background: var(--bg-tertiary); padding: var(--spacing-lg); border-radius: var(--radius-md); text-align: center;">
+                            <div
+                                style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: var(--spacing-xs);">
+                                Est. Returns</div>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--success);">₹ <span
+                                    id="returns">0</span></div>
+                        </div>
+                    </div>
+
+                    <div
+                        style="text-align: center; background: var(--bg-tertiary); padding: var(--spacing-xl); border-radius: var(--radius-md); margin-top: var(--spacing-md);">
+                        <div
+                            style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: var(--spacing-xs);">
+                            Maturity Value</div>
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-primary);">₹ <span
+                                id="maturity">0</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function calculate() {
+            const monthly = parseFloat(document.getElementById('monthly').value) || 0;
+            const rate = parseFloat(document.getElementById('return').value) || 0;
+            const years = parseFloat(document.getElementById('years').value) || 0;
+
+            const months = years * 12;
+            const monthlyRate = rate / (12 * 100);
+
+            const maturityValue = monthly * (((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate));
+            const totalInvested = monthly * months;
+            const totalReturns = maturityValue - totalInvested;
+
+            document.getElementById('invested').textContent = Math.round(totalInvested).toLocaleString('en-IN');
+            document.getElementById('returns').textContent = Math.round(totalReturns).toLocaleString('en-IN');
+            document.getElementById('maturity').textContent = Math.round(maturityValue).toLocaleString('en-IN');
+        }
+
+        calculate();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brightness/Contrast Adjuster - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>☀️ Brightness/Contrast Adjuster</h1>
+                <p class="hero-subtitle">Adjust brightness and contrast of images</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Upload Image</h4>
+                <div class="card-content">
+                    <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="loadImage()">
+                    <button class="btn btn-primary btn-block" onclick="document.getElementById('fileInput').click()">📁
+                        Select Image</button>
+                </div>
+            </div>
+
+            <div id="editSection" style="display: none;">
+                <div class="card mb-lg">
+                    <h4 class="card-title">Adjustments</h4>
+                    <div class="card-content">
+                        <div class="settings-row">
+                            <div>
+                                <div class="settings-label">Brightness (<span id="brightnessValue">100</span>%)</div>
+                            </div>
+                            <input type="range" id="brightnessSlider" min="0" max="200" value="100"
+                                oninput="applyFilters()" style="width: 100%;">
+                        </div>
+
+                        <div class="settings-row mt-md">
+                            <div>
+                                <div class="settings-label">Contrast (<span id="contrastValue">100</span>%)</div>
+                            </div>
+                            <input type="range" id="contrastSlider" min="0" max="200" value="100"
+                                oninput="applyFilters()" style="width: 100%;">
+                        </div>
+
+                        <button class="btn btn-secondary btn-block mt-md" onclick="reset()">🔄 Reset</button>
+                    </div>
+                </div>
+
+                <div class="card mb-lg">
+                    <h4 class="card-title">Preview</h4>
+                    <div class="card-content text-center">
+                        <canvas id="canvas"
+                            style="max-width: 100%; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md);"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <button class="btn btn-success btn-block" onclick="downloadImage()">📥 Download Image</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        let img = new Image();
+
+        function loadImage() {
+            const file = document.getElementById('fileInput').files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                img.src = e.target.result;
+                img.onload = () => {
+                    applyFilters();
+                    document.getElementById('editSection').style.display = 'block';
+                    showToast('Image loaded!', 'success');
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function applyFilters() {
+            const brightness = document.getElementById('brightnessSlider').value;
+            const contrast = document.getElementById('contrastSlider').value;
+
+            document.getElementById('brightnessValue').textContent = brightness;
+            document.getElementById('contrastValue').textContent = contrast;
+
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            ctx.filter = `brightness(${brightness}%) contrast(${contrast}%)`;
+            ctx.drawImage(img, 0, 0);
+        }
+
+        function reset() {
+            document.getElementById('brightnessSlider').value = 100;
+            document.getElementById('contrastSlider').value = 100;
+            applyFilters();
+            showToast('Reset to default', 'success');
+        }
+
+        function downloadImage() {
+            const canvas = document.getElementById('canvas');
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'adjusted-image.png';
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('Downloaded!', 'success');
+            });
+        }
+    </script>
+</body>
+
+</html>

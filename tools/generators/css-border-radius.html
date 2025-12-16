@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Border Radius Generator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🎨 CSS Border Radius Generator</h1>
+                <p class="hero-subtitle">Create custom border radius with live preview</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Corner Settings (px)</h4>
+                <div class="card-content">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md);">
+                        <div>
+                            <label style="display: block; margin-bottom: var(--spacing-xs); font-weight: 600;">Top
+                                Left</label>
+                            <input type="range" id="tl" min="0" max="200" value="20" oninput="updatePreview()"
+                                style="width: 100%;">
+                            <span id="tlValue">20px</span>
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: var(--spacing-xs); font-weight: 600;">Top
+                                Right</label>
+                            <input type="range" id="tr" min="0" max="200" value="20" oninput="updatePreview()"
+                                style="width: 100%;">
+                            <span id="trValue">20px</span>
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: var(--spacing-xs); font-weight: 600;">Bottom
+                                Right</label>
+                            <input type="range" id="br" min="0" max="200" value="20" oninput="updatePreview()"
+                                style="width: 100%;">
+                            <span id="brValue">20px</span>
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: var(--spacing-xs); font-weight: 600;">Bottom
+                                Left</label>
+                            <input type="range" id="bl" min="0" max="200" value="20" oninput="updatePreview()"
+                                style="width: 100%;">
+                            <span id="blValue">20px</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Preview</h4>
+                <div class="card-content text-center" style="padding: var(--spacing-xxl);">
+                    <div id="preview"
+                        style="width: 250px; height: 250px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0 auto;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">Generated CSS</h4>
+                <div class="card-content">
+                    <textarea id="cssOutput" readonly rows="2"
+                        style="width: 100%; padding: var(--spacing-md); background: var(--bg-secondary); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); font-family: monospace; color: var(--text-primary); font-size: 0.9rem;"></textarea>
+                    <button class="btn btn-success btn-block mt-md" onclick="copyCss()">📋 Copy CSS</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function updatePreview() {
+            const tl = document.getElementById('tl').value;
+            const tr = document.getElementById('tr').value;
+            const br = document.getElementById('br').value;
+            const bl = document.getElementById('bl').value;
+
+            document.getElementById('tlValue').textContent = tl + 'px';
+            document.getElementById('trValue').textContent = tr + 'px';
+            document.getElementById('brValue').textContent = br + 'px';
+            document.getElementById('blValue').textContent = bl + 'px';
+
+            const radius = `${tl}px ${tr}px ${br}px ${bl}px`;
+            document.getElementById('preview').style.borderRadius = radius;
+            document.getElementById('cssOutput').value = `border-radius: ${radius};`;
+        }
+
+        function copyCss() {
+            const css = document.getElementById('cssOutput');
+            css.select();
+            document.execCommand('copy');
+            showToast('CSS copied!', 'success');
+        }
+
+        updatePreview();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table of Contents Generator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>📑 Table of Contents Generator</h1>
+                <p class="hero-subtitle">Generate TOC from headings</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Markdown Headings</h4>
+                <div class="card-content">
+                    <textarea id="input" rows="15"
+                        placeholder="# Chapter 1&#10;## Section 1.1&#10;## Section 1.2&#10;# Chapter 2"
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem; font-family: monospace; resize: vertical;"></textarea>
+                    <button class="btn btn-primary btn-block mt-md" onclick="generate()">📑 Generate TOC</button>
+                </div>
+            </div>
+
+            <div id="resultSection" style="display: none;">
+                <div class="card">
+                    <h4 class="card-title">Table of Contents</h4>
+                    <div class="card-content">
+                        <textarea id="output" readonly rows="15"
+                            style="width: 100%; padding: var(--spacing-md); background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); color: var(--text-primary); font-size: 1rem; font-family: monospace; resize: vertical;"></textarea>
+                        <button class="btn btn-success btn-block mt-md" onclick="copy()">📋 Copy TOC</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function generate() {
+            const text = document.getElementById('input').value;
+            if (!text.trim()) {
+                showToast('Please enter markdown headings', 'warning');
+                return;
+            }
+
+            const lines = text.split('\n');
+            const toc = [];
+
+            lines.forEach(line => {
+                const match = line.match(/^(#{1,6})\s+(.+)/);
+                if (match) {
+                    const level = match[1].length;
+                    const heading = match[2];
+                    const slug = heading.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+                    const indent = '  '.repeat(level - 1);
+                    toc.push(`${indent}- [${heading}](#${slug})`);
+                }
+            });
+
+            document.getElementById('output').value = toc.join('\n');
+            document.getElementById('resultSection').style.display = 'block';
+            showToast('TOC generated!', 'success');
+        }
+
+        function copy() {
+            const output = document.getElementById('output');
+            output.select();
+            document.execCommand('copy');
+            showToast('Copied!', 'success');
+        }
+    </script>
+</body>
+
+</html>

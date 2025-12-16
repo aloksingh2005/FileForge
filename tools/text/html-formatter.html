@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Formatter - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>📄 HTML Formatter</h1>
+                <p class="hero-subtitle">Format and beautify HTML code</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">HTML Input</h4>
+                <div class="card-content">
+                    <textarea id="input" rows="12" placeholder="<div><p>Hello</p></div>"
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 0.9rem; font-family: monospace; resize: vertical;"></textarea>
+                    <button class="btn btn-primary btn-block mt-md" onclick="formatHTML()">✨ Format HTML</button>
+                </div>
+            </div>
+
+            <div id="resultSection" style="display: none;">
+                <div class="card">
+                    <h4 class="card-title">Formatted HTML</h4>
+                    <div class="card-content">
+                        <textarea id="output" readonly rows="12"
+                            style="width: 100%; padding: var(--spacing-md); background: var(--bg-tertiary); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; font-family: monospace; resize: vertical;"></textarea>
+                        <button class="btn btn-success btn-block mt-md" onclick="copyOutput()">📋 Copy Formatted
+                            HTML</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function formatHTML() {
+            const input = document.getElementById('input').value;
+            if (!input.trim()) {
+                showToast('Please enter HTML', 'warning');
+                return;
+            }
+
+            let formatted = '';
+            let indent = 0;
+            const tab = '  ';
+
+            input.split(/>\s*</).forEach((node, index) => {
+                if (index > 0) node = '<' + node;
+                if (index < input.split(/>\s*</).length - 1) node = node + '>';
+
+                if (node.match(/^<\/\w/)) indent--;
+                formatted += tab.repeat(Math.max(0, indent)) + node.trim() + '\n';
+                if (node.match(/^<\w[^>]*[^\/]>.*$/) && !node.match(/^<(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)/i)) {
+                    indent++;
+                }
+            });
+
+            document.getElementById('output').value = formatted.trim();
+            document.getElementById('resultSection').style.display = 'block';
+            showToast('HTML formatted!', 'success');
+        }
+
+        function copyOutput() {
+            const output = document.getElementById('output');
+            output.select();
+            document.execCommand('copy');
+            showToast('Copied!', 'success');
+        }
+    </script>
+</body>
+
+</html>

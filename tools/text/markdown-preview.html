@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown Preview - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container">
+            <div class="text-center mt-xl mb-lg">
+                <h1>📝 Markdown Preview</h1>
+                <p class="hero-subtitle">Write markdown and see live preview</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-lg);">
+                <div class="card">
+                    <h4 class="card-title">Markdown Input</h4>
+                    <div class="card-content">
+                        <textarea id="markdown" rows="20" oninput="preview()" placeholder="# Hello World
+
+Write your **markdown** here..."
+                            style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem; font-family: monospace; resize: vertical;"></textarea>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h4 class="card-title">Preview</h4>
+                    <div class="card-content">
+                        <div id="preview"
+                            style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); min-height: 400px; line-height: 1.6;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function preview() {
+            const markdown = document.getElementById('markdown').value;
+            const html = marked.parse(markdown);
+            document.getElementById('preview').innerHTML = html;
+        }
+
+        // Initial preview
+        document.getElementById('markdown').value = '# Hello World\n\nThis is a **markdown** preview tool.\n\n## Features\n\n- Live preview\n- Full markdown support\n- Easy to use';
+        preview();
+    </script>
+</body>
+
+</html>

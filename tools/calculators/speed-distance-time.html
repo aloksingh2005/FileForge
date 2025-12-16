@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed/Distance/Time Calculator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🏃 Speed/Distance/Time Calculator</h1>
+                <p class="hero-subtitle">Calculate speed, distance, or time</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Calculate</h4>
+                <div class="card-content">
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Find</div>
+                        </div>
+                        <select id="findWhat" onchange="updateForm()"
+                            style="padding: 0.75rem; border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); border: 2px solid var(--bg-tertiary); width: 100%;">
+                            <option value="speed">Speed</option>
+                            <option value="distance">Distance</option>
+                            <option value="time">Time</option>
+                        </select>
+                    </div>
+
+                    <div id="inputSection" style="margin-top: var(--spacing-lg);"></div>
+
+                    <button class="btn btn-primary btn-block mt-lg" onclick="calculate()">🔢 Calculate</button>
+                </div>
+            </div>
+
+            <div id="resultSection" style="display: none;">
+                <div class="card">
+                    <h4 class="card-title">Result</h4>
+                    <div class="card-content">
+                        <div
+                            style="text-align: center; background: var(--bg-tertiary); padding: var(--spacing-xl); border-radius: var(--radius-md);">
+                            <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-primary);" id="result">
+                                0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function updateForm() {
+            const findWhat = document.getElementById('findWhat').value;
+            const inputSection = document.getElementById('inputSection');
+
+            if (findWhat === 'speed') {
+                inputSection.innerHTML = `
+                    <div class="settings-row">
+                        <div><div class="settings-label">Distance (km)</div></div>
+                        <input type="number" id="distance" placeholder="100" style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+                    <div class="settings-row mt-md">
+                        <div><div class="settings-label">Time (hours)</div></div>
+                        <input type="number" id="time" placeholder="2" style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+                `;
+            } else if (findWhat === 'distance') {
+                inputSection.innerHTML = `
+                    <div class="settings-row">
+                        <div><div class="settings-label">Speed (km/h)</div></div>
+                        <input type="number" id="speed" placeholder="60" style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+                    <div class="settings-row mt-md">
+                        <div><div class="settings-label">Time (hours)</div></div>
+                        <input type="number" id="time" placeholder="2" style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+                `;
+            } else {
+                inputSection.innerHTML = `
+                    <div class="settings-row">
+                        <div><div class="settings-label">Distance (km)</div></div>
+                        <input type="number" id="distance" placeholder="100" style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+                    <div class="settings-row mt-md">
+                        <div><div class="settings-label">Speed (km/h)</div></div>
+                        <input type="number" id="speed" placeholder="60" style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+                `;
+            }
+        }
+
+        function calculate() {
+            const findWhat = document.getElementById('findWhat').value;
+            let result;
+
+            if (findWhat === 'speed') {
+                const distance = parseFloat(document.getElementById('distance').value) || 0;
+                const time = parseFloat(document.getElementById('time').value) || 0;
+                result = time > 0 ? `${(distance / time).toFixed(2)} km/h` : 'Invalid';
+            } else if (findWhat === 'distance') {
+                const speed = parseFloat(document.getElementById('speed').value) || 0;
+                const time = parseFloat(document.getElementById('time').value) || 0;
+                result = `${(speed * time).toFixed(2)} km`;
+            } else {
+                const distance = parseFloat(document.getElementById('distance').value) || 0;
+                const speed = parseFloat(document.getElementById('speed').value) || 0;
+                result = speed > 0 ? `${(distance / speed).toFixed(2)} hours` : 'Invalid';
+            }
+
+            document.getElementById('result').textContent = result;
+            document.getElementById('resultSection').style.display = 'block';
+            showToast('Calculated!', 'success');
+        }
+
+        updateForm();
+    </script>
+</body>
+
+</html>

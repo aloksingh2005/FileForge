@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMI Calculator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🏦 EMI Calculator</h1>
+                <p class="hero-subtitle">Calculate your loan EMI (Equated Monthly Installment)</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Loan Details</h4>
+                <div class="card-content">
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Loan Amount (₹)</div>
+                        </div>
+                        <input type="number" id="loanAmount" value="1000000" placeholder="1000000" oninput="calculate()"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Interest Rate (% per annum)</div>
+                        </div>
+                        <input type="number" id="interestRate" value="8.5" step="0.1" oninput="calculate()"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Loan Tenure (years)</div>
+                        </div>
+                        <input type="number" id="tenure" value="20" min="1" oninput="calculate()"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">EMI Summary</h4>
+                <div class="card-content">
+                    <div
+                        style="text-align: center; background: var(--bg-tertiary); padding: var(--spacing-xl); border-radius: var(--radius-md); margin-bottom: var(--spacing-md);">
+                        <div
+                            style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: var(--spacing-xs);">
+                            Monthly EMI</div>
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-primary);">₹ <span
+                                id="emi">0</span></div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md);">
+                        <div
+                            style="background: var(--bg-tertiary); padding: var(--spacing-lg); border-radius: var(--radius-md); text-align: center;">
+                            <div
+                                style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: var(--spacing-xs);">
+                                Total Interest</div>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--warning);">₹ <span
+                                    id="totalInterest">0</span></div>
+                        </div>
+                        <div
+                            style="background: var(--bg-tertiary); padding: var(--spacing-lg); border-radius: var(--radius-md); text-align: center;">
+                            <div
+                                style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: var(--spacing-xs);">
+                                Total Amount</div>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--success);">₹ <span
+                                    id="totalAmount">0</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function calculate() {
+            const principal = parseFloat(document.getElementById('loanAmount').value) || 0;
+            const rate = parseFloat(document.getElementById('interestRate').value) || 0;
+            const tenure = parseFloat(document.getElementById('tenure').value) || 0;
+
+            const monthlyRate = rate / (12 * 100);
+            const months = tenure * 12;
+
+            let emi = 0;
+            if (principal > 0 && rate > 0 && tenure > 0) {
+                emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+            }
+
+            const totalAmount = emi * months;
+            const totalInterest = totalAmount - principal;
+
+            document.getElementById('emi').textContent = Math.round(emi).toLocaleString('en-IN');
+            document.getElementById('totalInterest').textContent = Math.round(totalInterest).toLocaleString('en-IN');
+            document.getElementById('totalAmount').textContent = Math.round(totalAmount).toLocaleString('en-IN');
+        }
+
+        calculate();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Viewer - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🔍 JSON Viewer</h1>
+                <p class="hero-subtitle">View and explore JSON data with collapsible tree view</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Enter JSON</h4>
+                <div class="card-content">
+                    <textarea id="jsonInput" rows="10" placeholder='{"name": "John", "age": 30, "city": "New York"}'
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 0.9rem; font-family: monospace; resize: vertical;"></textarea>
+                    <button class="btn btn-primary btn-block mt-md" onclick="viewJSON()">👁️ View JSON</button>
+                </div>
+            </div>
+
+            <div id="resultSection" style="display: none;">
+                <div class="card">
+                    <h4 class="card-title">JSON Tree View</h4>
+                    <div class="card-content">
+                        <div id="jsonTree"
+                            style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); font-family: monospace; font-size: 0.9rem; max-height: 500px; overflow-y: auto;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        .json-key {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .json-string {
+            color: #48bb78;
+        }
+
+        .json-number {
+            color: #ed8936;
+        }
+
+        .json-boolean {
+            color: #9f7aea;
+        }
+
+        .json-null {
+            color: #e53e3e;
+        }
+
+        .json-expandable {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .json-expandable:hover {
+            background: var(--bg-secondary);
+        }
+
+        .json-collapsed {
+            display: none;
+        }
+    </style>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function viewJSON() {
+            const input = document.getElementById('jsonInput').value.trim();
+            if (!input) {
+                showToast('Please enter JSON', 'warning');
+                return;
+            }
+
+            try {
+                const parsed = JSON.parse(input);
+                const tree = document.getElementById('jsonTree');
+                tree.innerHTML = renderJSON(parsed);
+                document.getElementById('resultSection').style.display = 'block';
+                showToast('JSON parsed successfully!', 'success');
+            } catch (error) {
+                showToast('Invalid JSON: ' + error.message, 'error');
+            }
+        }
+
+        function renderJSON(obj, indent = 0) {
+            const spacing = '  '.repeat(indent);
+            let html = '';
+
+            if (Array.isArray(obj)) {
+                html += `<div style="margin-left: ${indent * 20}px;">[</div>`;
+                obj.forEach((item, idx) => {
+                    html += renderJSON(item, indent + 1);
+                    if (idx < obj.length - 1) html += ',';
+                    html += '<br>';
+                });
+                html += `<div style="margin-left: ${indent * 20}px;">]</div>`;
+            } else if (typeof obj === 'object' && obj !== null) {
+                html += `<div style="margin-left: ${indent * 20}px;">{</div>`;
+                const keys = Object.keys(obj);
+                keys.forEach((key, idx) => {
+                    html += `<div style="margin-left: ${(indent + 1) * 20}px;">`;
+                    html += `<span class="json-key">"${key}"</span>: `;
+                    if (typeof obj[key] === 'object' && obj[key] !== null) {
+                        html += renderJSON(obj[key], indent + 1);
+                    } else {
+                        html += formatValue(obj[key]);
+                    }
+                    if (idx < keys.length - 1) html += ',';
+                    html += '</div>';
+                });
+                html += `<div style="margin-left: ${indent * 20}px;">}</div>`;
+            } else {
+                html += `<span style="margin-left: ${indent * 20}px;">${formatValue(obj)}</span>`;
+            }
+
+            return html;
+        }
+
+        function formatValue(val) {
+            if (typeof val === 'string') return `<span class="json-string">"${val}"</span>`;
+            if (typeof val === 'number') return `<span class="json-number">${val}</span>`;
+            if (typeof val === 'boolean') return `<span class="json-boolean">${val}</span>`;
+            if (val === null) return `<span class="json-null">null</span>`;
+            return val;
+        }
+    </script>
+</body>
+
+</html>

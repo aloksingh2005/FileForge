@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Box Shadow Generator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🎨 CSS Box Shadow Generator</h1>
+                <p class="hero-subtitle">Create beautiful box shadows with live preview</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Shadow Settings</h4>
+                <div class="card-content">
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Horizontal Offset (px)</div>
+                        </div>
+                        <input type="range" id="hOffset" min="-50" max="50" value="0" oninput="updatePreview()"
+                            style="width: 200px;">
+                        <span id="hValue">0px</span>
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Vertical Offset (px)</div>
+                        </div>
+                        <input type="range" id="vOffset" min="-50" max="50" value="4" oninput="updatePreview()"
+                            style="width: 200px;">
+                        <span id="vValue">4px</span>
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Blur Radius (px)</div>
+                        </div>
+                        <input type="range" id="blur" min="0" max="100" value="10" oninput="updatePreview()"
+                            style="width: 200px;">
+                        <span id="blurValue">10px</span>
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Spread Radius (px)</div>
+                        </div>
+                        <input type="range" id="spread" min="-50" max="50" value="0" oninput="updatePreview()"
+                            style="width: 200px;">
+                        <span id="spreadValue">0px</span>
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Shadow Color</div>
+                        </div>
+                        <input type="color" id="shadowColor" value="#000000" oninput="updatePreview()"
+                            style="width: 80px; height: 50px;">
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Opacity</div>
+                        </div>
+                        <input type="range" id="opacity" min="0" max="100" value="20" oninput="updatePreview()"
+                            style="width: 200px;">
+                        <span id="opacityValue">0.2</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Preview</h4>
+                <div class="card-content text-center" style="padding: var(--spacing-xxl);">
+                    <div id="preview"
+                        style="width: 200px; height: 150px; background: white; margin: 0 auto; display: flex; align-items: center; justify-content: center; color: #333; font-weight: 600;">
+                        Shadow Preview</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">Generated CSS</h4>
+                <div class="card-content">
+                    <textarea id="cssOutput" readonly rows="3"
+                        style="width: 100%; padding: var(--spacing-md); background: var(--bg-secondary); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); font-family: monospace; color: var(--text-primary); font-size: 0.9rem;"></textarea>
+                    <button class="btn btn-success btn-block mt-md" onclick="copyCss()">📋 Copy CSS</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function updatePreview() {
+            const h = document.getElementById('hOffset').value;
+            const v = document.getElementById('vOffset').value;
+            const blur = document.getElementById('blur').value;
+            const spread = document.getElementById('spread').value;
+            const color = document.getElementById('shadowColor').value;
+            const opacity = document.getElementById('opacity').value / 100;
+
+            document.getElementById('hValue').textContent = h + 'px';
+            document.getElementById('vValue').textContent = v + 'px';
+            document.getElementById('blurValue').textContent = blur + 'px';
+            document.getElementById('spreadValue').textContent = spread + 'px';
+            document.getElementById('opacityValue').textContent = opacity.toFixed(2);
+
+            const hexToRgb = (hex) => {
+                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                return result ? {
+                    r: parseInt(result[1], 16),
+                    g: parseInt(result[2], 16),
+                    b: parseInt(result[3], 16)
+                } : null;
+            };
+
+            const rgb = hexToRgb(color);
+            const shadow = `${h}px ${v}px ${blur}px ${spread}px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`;
+
+            document.getElementById('preview').style.boxShadow = shadow;
+            document.getElementById('cssOutput').value = `box-shadow: ${shadow};`;
+        }
+
+        function copyCss() {
+            const css = document.getElementById('cssOutput');
+            css.select();
+            document.execCommand('copy');
+            showToast('CSS copied!', 'success');
+        }
+
+        updatePreview();
+    </script>
+</body>
+
+</html>

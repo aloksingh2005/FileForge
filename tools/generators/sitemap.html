@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sitemap.xml Generator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🗺️ Sitemap.xml Generator</h1>
+                <p class="hero-subtitle">Generate XML sitemap for search engines</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Add URLs</h4>
+                <div class="card-content">
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Website URL</div>
+                        </div>
+                        <input type="text" id="baseUrl" placeholder="https://example.com"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary);">
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">URLs (one per line)</div>
+                        </div>
+                        <textarea id="urls" rows="8" placeholder="/\n/about\n/contact\n/blog"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-family: monospace; resize: vertical;"></textarea>
+                    </div>
+
+                    <button class="btn btn-primary btn-block mt-lg" onclick="generate()">✨ Generate Sitemap</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">Generated sitemap.xml</h4>
+                <div class="card-content">
+                    <textarea id="output" readonly rows="15"
+                        style="width: 100%; padding: var(--spacing-md); background: var(--bg-secondary); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); font-family: monospace; color: var(--text--primary); font-size: 0.85rem;"></textarea>
+                    <button class="btn btn-success btn-block mt-md" onclick="copyCode()">📋 Copy XML</button>
+                    <button class="btn btn-secondary btn-block mt-sm" onclick="downloadFile()">📥 Download
+                        sitemap.xml</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function generate() {
+            const baseUrl = document.getElementById('baseUrl').value || 'https://example.com';
+            const urls = document.getElementById('urls').value.trim();
+
+            const today = new Date().toISOString().split('T')[0];
+
+            let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+            xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+
+            if (urls) {
+                const urlList = urls.split('\n');
+                urlList.forEach(url => {
+                    if (url.trim()) {
+                        const fullUrl = baseUrl + (url.startsWith('/') ? url : '/' + url);
+                        xml += `  <url>\n`;
+                        xml += `    <loc>${fullUrl.trim()}</loc>\n`;
+                        xml += `    <lastmod>${today}</lastmod>\n`;
+                        xml += `    <priority>0.8</priority>\n`;
+                        xml += `  </url>\n`;
+                    }
+                });
+            }
+
+            xml += `</urlset>`;
+
+            document.getElementById('output').value = xml;
+            showToast('Sitemap generated!', 'success');
+        }
+
+        function copyCode() {
+            const output = document.getElementById('output');
+            output.select();
+            document.execCommand('copy');
+            showToast('XML copied!', 'success');
+        }
+
+        function downloadFile() {
+            const content = document.getElementById('output').value;
+            const blob = new Blob([content], { type: 'application/xml' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'sitemap.xml';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Downloaded sitemap.xml!', 'success');
+        }
+    </script>
+</body>
+
+</html>

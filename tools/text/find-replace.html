@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find & Replace - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🔍 Find & Replace</h1>
+                <p class="hero-subtitle">Search and replace text</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Input Text</h4>
+                <div class="card-content">
+                    <textarea id="input" rows="10" placeholder="Enter your text..."
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem; resize: vertical;"></textarea>
+                </div>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Find & Replace</h4>
+                <div class="card-content">
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Find</div>
+                        </div>
+                        <input type="text" id="find" placeholder="Search term"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem;">
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Replace with</div>
+                        </div>
+                        <input type="text" id="replace" placeholder="Replacement term"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem;">
+                    </div>
+
+                    <div style="margin-top: var(--spacing-md);">
+                        <label><input type="checkbox" id="caseSensitive"> Case sensitive</label>
+                    </div>
+
+                    <button class="btn btn-primary btn-block mt-lg" onclick="findReplace()">🔄 Replace All</button>
+                </div>
+            </div>
+
+            <div id="resultSection" style="display: none;">
+                <div class="card">
+                    <h4 class="card-title">Result</h4>
+                    <div class="card-content">
+                        <div
+                            style="padding: var(--spacing-md); background: var(--bg-secondary); border-radius: var(--radius-md); margin-bottom: var(--spacing-md); text-align: center;">
+                            <strong><span id="count">0</span> replacements made</strong>
+                        </div>
+                        <textarea id="output" readonly rows="10"
+                            style="width: 100%; padding: var(--spacing-md); background: var(--bg-tertiary); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); color: var(--text-primary); font-size: 1rem; resize: vertical;"></textarea>
+                        <button class="btn btn-success btn-block mt-md" onclick="copyOutput()">📋 Copy Result</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function findReplace() {
+            const input = document.getElementById('input').value;
+            const find = document.getElementById('find').value;
+            const replace = document.getElementById('replace').value;
+            const caseSensitive = document.getElementById('caseSensitive').checked;
+
+            if (!find) {
+                showToast('Please enter a search term', 'warning');
+                return;
+            }
+
+            let flags = 'g';
+            if (!caseSensitive) flags += 'i';
+
+            const regex = new RegExp(find.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), flags);
+
+            let count = 0;
+            const result = input.replace(regex, (match) => {
+                count++;
+                return replace;
+            });
+
+            document.getElementById('output').value = result;
+            document.getElementById('count').textContent = count;
+            document.getElementById('resultSection').style.display = 'block';
+            showToast(`${count} replacements made`, 'success');
+        }
+
+        function copyOutput() {
+            const output = document.getElementById('output');
+            output.select();
+            document.execCommand('copy');
+            showToast('Copied!', 'success');
+        }
+    </script>
+</body>
+
+</html>

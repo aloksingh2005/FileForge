@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blur Image Tool - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🌫️ Blur Image Tool</h1>
+                <p class="hero-subtitle">Apply blur effect to images</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Upload Image</h4>
+                <div class="card-content">
+                    <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="loadImage()">
+                    <button class="btn btn-primary btn-block" onclick="document.getElementById('fileInput').click()">📁
+                        Select Image</button>
+                </div>
+            </div>
+
+            <div id="editSection" style="display: none;">
+                <div class="card mb-lg">
+                    <h4 class="card-title">Blur Intensity</h4>
+                    <div class="card-content">
+                        <div style="display: flex; align-items: center; gap: var(--spacing-md);">
+                            <input type="range" id="blurSlider" min="0" max="20" value="5" oninput="applyBlur()"
+                                style="flex: 1;">
+                            <span id="blurValue"
+                                style="font-weight: 700; font-size: 1.1rem; min-width: 60px;">5px</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-lg">
+                    <h4 class="card-title">Preview</h4>
+                    <div class="card-content text-center">
+                        <canvas id="canvas"
+                            style="max-width: 100%; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md);"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <button class="btn btn-success btn-block" onclick="downloadImage()">📥 Download Blurred
+                            Image</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        let img = new Image();
+
+        function loadImage() {
+            const file = document.getElementById('fileInput').files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                img.src = e.target.result;
+                img.onload = () => {
+                    applyBlur();
+                    document.getElementById('editSection').style.display = 'block';
+                    showToast('Image loaded!', 'success');
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function applyBlur() {
+            const blur = document.getElementById('blurSlider').value;
+            document.getElementById('blurValue').textContent = blur + 'px';
+
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            ctx.filter = `blur(${blur}px)`;
+            ctx.drawImage(img, 0, 0);
+        }
+
+        function downloadImage() {
+            const canvas = document.getElementById('canvas');
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'blurred-image.png';
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('Downloaded!', 'success');
+            });
+        }
+    </script>
+</body>
+
+</html>

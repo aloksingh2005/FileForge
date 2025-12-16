@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screen Resolution Checker - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🖥️ Screen Resolution Checker</h1>
+                <p class="hero-subtitle">Check your screen and window dimensions</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Screen Resolution</h4>
+                <div class="card-content">
+                    <div
+                        style="text-align: center; background: var(--bg-tertiary); padding: var(--spacing-xl); border-radius: var(--radius-md);">
+                        <div style="font-size: 3rem; font-weight: 700; color: var(--accent-primary);"
+                            id="screenResolution">-</div>
+                        <p style="margin-top: var(--spacing-sm); color: var(--text-secondary);">pixels</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Window Size</h4>
+                <div class="card-content">
+                    <div
+                        style="text-align: center; background: var(--bg-tertiary); padding: var(--spacing-xl); border-radius: var(--radius-md);">
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--success);" id="windowSize">-</div>
+                        <p style="margin-top: var(--spacing-sm); color: var(--text-secondary);">pixels (resizes with
+                            window)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">Additional Info</h4>
+                <div class="card-content">
+                    <div style="display: grid; gap: var(--spacing-sm);">
+                        <div
+                            style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); display: flex; justify-content: space-between;">
+                            <strong>Color Depth:</strong>
+                            <span id="colorDepth">-</span>
+                        </div>
+                        <div
+                            style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); display: flex; justify-content: space-between;">
+                            <strong>Pixel Ratio:</strong>
+                            <span id="pixelRatio">-</span>
+                        </div>
+                        <div
+                            style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); display: flex; justify-content: space-between;">
+                            <strong>Orientation:</strong>
+                            <span id="orientation">-</span>
+                        </div>
+                        <div
+                            style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); display: flex; justify-content: space-between;">
+                            <strong>Available Width:</strong>
+                            <span id="availWidth">-</span>
+                        </div>
+                        <div
+                            style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); display: flex; justify-content: space-between;">
+                            <strong>Available Height:</strong>
+                            <span id="availHeight">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function updateInfo() {
+            document.getElementById('screenResolution').textContent = `${screen.width} × ${screen.height}`;
+            document.getElementById('windowSize').textContent = `${window.innerWidth} × ${window.innerHeight}`;
+            document.getElementById('colorDepth').textContent = `${screen.colorDepth} bit`;
+            document.getElementById('pixelRatio').textContent = window.devicePixelRatio || 1;
+            document.getElementById('orientation').textContent = window.innerWidth > window.innerHeight ? 'Landscape' : 'Portrait';
+            document.getElementById('availWidth').textContent = `${screen.availWidth}px`;
+            document.getElementById('availHeight').textContent = `${screen.availHeight}px`;
+        }
+
+        updateInfo();
+        window.addEventListener('resize', updateInfo);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser Info - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🌐 Browser Information</h1>
+                <p class="hero-subtitle">View your browser and system information</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Browser Details</h4>
+                <div class="card-content">
+                    <div style="display: grid; gap: var(--spacing-sm);">
+                        <div
+                            style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); display: flex; justify-content: space-between;">
+                            <strong>Browser:</strong>
+                            <span id="browser">-</span>
+                        </div>
+                        <div
+                            style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); display: flex; justify-content: space-between;">
+                            <strong>Platform:</strong>
+                            <span id="platform">-</span>
+                        </div>
+                        <div
+                            style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); display: flex; justify-content: space-between;">
+                            <strong>Language:</strong>
+                            <span id="language">-</span>
+                        </div>
+                        <div
+                            style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); display: flex; justify-content: space-between;">
+                            <strong>Cookies Enabled:</strong>
+                            <span id="cookies">-</span>
+                        </div>
+                        <div
+                            style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); display: flex; justify-content: space-between;">
+                            <strong>Online:</strong>
+                            <span id="online">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Screen Resolution</h4>
+                <div class="card-content">
+                    <div style="display: grid; gap: var(--spacing-sm);">
+                        <div
+                            style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); display: flex; justify-content: space-between;">
+                            <strong>Screen Size:</strong>
+                            <span id="screen">-</span>
+                        </div>
+                        <div
+                            style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); display: flex; justify-content: space-between;">
+                            <strong>Window Size:</strong>
+                            <span id="window">-</span>
+                        </div>
+                        <div
+                            style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); display: flex; justify-content: space-between;">
+                            <strong>Color Depth:</strong>
+                            <span id="colorDepth">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">User Agent</h4>
+                <div class="card-content">
+                    <code id="userAgent"
+                        style="display: block; padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); word-break: break-all; font-size: 0.85rem;">-</code>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        // Browser detection
+        function getBrowser() {
+            const ua = navigator.userAgent;
+            if (ua.includes('Firefox')) return 'Firefox';
+            if (ua.includes('Chrome')) return 'Chrome';
+            if (ua.includes('Safari')) return 'Safari';
+            if (ua.includes('Edge')) return 'Edge';
+            return 'Unknown';
+        }
+
+        // Populate data
+        document.getElementById('browser').textContent = getBrowser();
+        document.getElementById('platform').textContent = navigator.platform;
+        document.getElementById('language').textContent = navigator.language;
+        document.getElementById('cookies').textContent = navigator.cookieEnabled ? 'Yes' : 'No';
+        document.getElementById('online').textContent = navigator.onLine ? 'Yes' : 'No';
+        document.getElementById('screen').textContent = `${screen.width} × ${screen.height}`;
+        document.getElementById('window').textContent = `${window.innerWidth} × ${window.innerHeight}`;
+        document.getElementById('colorDepth').textContent = `${screen.colorDepth} bit`;
+        document.getElementById('userAgent').textContent = navigator.userAgent;
+
+        // Update window size on resize
+        window.addEventListener('resize', () => {
+            document.getElementById('window').textContent = `${window.innerWidth} × ${window.innerHeight}`;
+        });
+    </script>
+</body>
+
+</html>

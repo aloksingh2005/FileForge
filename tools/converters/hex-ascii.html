@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hex to ASCII - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🔤 Hex to ASCII Converter</h1>
+                <p class="hero-subtitle">Convert between hexadecimal and ASCII text</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Input</h4>
+                <div class="card-content">
+                    <textarea id="input" rows="8" placeholder="Enter text or hex (e.g., 48656C6C6F)"
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem; font-family: monospace; resize: vertical;"></textarea>
+                    <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-md);">
+                        <button class="btn btn-primary" onclick="textToHex()" style="flex: 1;">➡️ Text to Hex</button>
+                        <button class="btn btn-secondary" onclick="hexToText()" style="flex: 1;">⬅️ Hex to Text</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="resultSection" style="display: none;">
+                <div class="card">
+                    <h4 class="card-title">Result</h4>
+                    <div class="card-content">
+                        <textarea id="output" readonly rows="8"
+                            style="width: 100%; padding: var(--spacing-md); background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); color: var(--text-primary); font-size: 1rem; font-family: monospace; resize: vertical;"></textarea>
+                        <button class="btn btn-success btn-block mt-md" onclick="copyOutput()">📋 Copy Result</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function textToHex() {
+            const text = document.getElementById('input').value;
+            if (!text) {
+                showToast('Please enter text', 'warning');
+                return;
+            }
+
+            const hex = text.split('').map(char => {
+                return char.charCodeAt(0).toString(16).padStart(2, '0').toUpperCase();
+            }).join('');
+
+            document.getElementById('output').value = hex;
+            document.getElementById('resultSection').style.display = 'block';
+            showToast('Converted to hex!', 'success');
+        }
+
+        function hexToText() {
+            const hex = document.getElementById('input').value.replace(/\s/g, '');
+            if (!hex || !/^[0-9A-Fa-f]+$/.test(hex)) {
+                showToast('Please enter valid hexadecimal', 'warning');
+                return;
+            }
+
+            const text = hex.match(/.{1,2}/g).map(byte => {
+                return String.fromCharCode(parseInt(byte, 16));
+            }).join('');
+
+            document.getElementById('output').value = text;
+            document.getElementById('resultSection').style.display = 'block';
+            showToast('Converted to text!', 'success');
+        }
+
+        function copyOutput() {
+            const output = document.getElementById('output');
+            output.select();
+            document.execCommand('copy');
+            showToast('Copied!', 'success');
+        }
+    </script>
+</body>
+
+</html>

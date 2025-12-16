@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature Converter - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>🌡️ Temperature Converter</h1>
+                <p class="hero-subtitle">Convert between Celsius, Fahrenheit, and Kelvin</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Enter Temperature</h4>
+                <div class="card-content">
+                    <div style="display: flex; gap: var(--spacing-md); align-items: center;">
+                        <input type="number" id="tempValue" placeholder="25" oninput="convert()"
+                            style="flex: 1; padding: var(--spacing-lg); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1.5rem; text-align: center; font-weight: 700;">
+                        <select id="tempUnit" onchange="convert()"
+                            style="padding: var(--spacing-lg); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); border: 2px solid var(--bg-tertiary); font-size: 1.1rem;">
+                            <option value="c">°C</option>
+                            <option value="f">°F</option>
+                            <option value="k">K</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div id="resultSection" style="display: none;">
+                <div style="display: grid; gap: var(--spacing-md);">
+                    <div class="card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <div class="card-content text-center" style="padding: var(--spacing-xl);">
+                            <div
+                                style="color: white; opacity: 0.9; font-size: 0.875rem; margin-bottom: var(--spacing-xs);">
+                                Celsius</div>
+                            <div id="celsius"
+                                style="font-size: 2.5rem; font-weight: 700; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">
+                                -</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <div class="card-content text-center" style="padding: var(--spacing-xl);">
+                            <div
+                                style="color: white; opacity: 0.9; font-size: 0.875rem; margin-bottom: var(--spacing-xs);">
+                                Fahrenheit</div>
+                            <div id="fahrenheit"
+                                style="font-size: 2.5rem; font-weight: 700; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">
+                                -</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <div class="card-content text-center" style="padding: var(--spacing-xl);">
+                            <div
+                                style="color: white; opacity: 0.9; font-size: 0.875rem; margin-bottom: var(--spacing-xs);">
+                                Kelvin</div>
+                            <div id="kelvin"
+                                style="font-size: 2.5rem; font-weight: 700; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">
+                                -</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function convert() {
+            const value = parseFloat(document.getElementById('tempValue').value);
+            const unit = document.getElementById('tempUnit').value;
+
+            if (isNaN(value)) {
+                document.getElementById('resultSection').style.display = 'none';
+                return;
+            }
+
+            let c, f, k;
+
+            switch (unit) {
+                case 'c':
+                    c = value;
+                    f = (value * 9 / 5) + 32;
+                    k = value + 273.15;
+                    break;
+                case 'f':
+                    c = (value - 32) * 5 / 9;
+                    f = value;
+                    k = (value - 32) * 5 / 9 + 273.15;
+                    break;
+                case 'k':
+                    c = value - 273.15;
+                    f = (value - 273.15) * 9 / 5 + 32;
+                    k = value;
+                    break;
+            }
+
+            document.getElementById('celsius').textContent = c.toFixed(2) + ' °C';
+            document.getElementById('fahrenheit').textContent = f.toFixed(2) + ' °F';
+            document.getElementById('kelvin').textContent = k.toFixed(2) + ' K';
+            document.getElementById('resultSection').style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>

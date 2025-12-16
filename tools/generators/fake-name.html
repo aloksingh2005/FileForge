@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake Name Generator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>👨 Fake Name Generator</h1>
+                <p class="hero-subtitle">Generate random fake names for testing</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Options</h4>
+                <div class="card-content">
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-label">Gender</div>
+                        </div>
+                        <select id="gender"
+                            style="padding: 0.75rem; border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); border: 2px solid var(--bg-tertiary);">
+                            <option value="random">Random</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+
+                    <div class="settings-row mt-md">
+                        <div>
+                            <div class="settings-label">Number of Names</div>
+                        </div>
+                        <input type="number" id="count" value="5" min="1" max="20"
+                            style="width: 100px; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary);">
+                    </div>
+
+                    <button class="btn btn-primary btn-block mt-lg" onclick="generate()">✨ Generate Names</button>
+                </div>
+            </div>
+
+            <div id="results" style="display: none;">
+                <div class="card">
+                    <h4 class="card-title">Generated Names</h4>
+                    <div class="card-content" id="nameList"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        const maleFirstNames = ['James', 'John', 'Robert', 'Michael', 'William', 'David', 'Richard', 'Joseph', 'Thomas', 'Charles', 'Christopher', 'Daniel', 'Matthew', 'Anthony', 'Mark', 'Donald', 'Steven', 'Paul', 'Andrew', 'Joshua'];
+        const femaleFirstNames = ['Mary', 'Patricia', 'Jennifer', 'Linda', 'Elizabeth', 'Barbara', 'Susan', 'Jessica', 'Sarah', 'Karen', 'Nancy', 'Lisa', 'Betty', 'Margaret', 'Sandra', 'Ashley', 'Kimberly', 'Emily', 'Donna', 'Michelle'];
+        const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez', 'Hernandez', 'Lopez', 'Gonzalez', 'Wilson', 'Anderson', 'Thomas', 'Taylor', 'Moore', 'Jackson', 'Martin'];
+
+        function generate() {
+            const gender = document.getElementById('gender').value;
+            const count = parseInt(document.getElementById('count').value);
+            const results = [];
+
+            for (let i = 0; i < count; i++) {
+                let firstName;
+                const actualGender = gender === 'random' ? (Math.random() > 0.5 ? 'male' : 'female') : gender;
+
+                if (actualGender === 'male') {
+                    firstName = maleFirstNames[Math.floor(Math.random() * maleFirstNames.length)];
+                } else {
+                    firstName = femaleFirstNames[Math.floor(Math.random() * femaleFirstNames.length)];
+                }
+
+                const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+                results.push({ name: `${firstName} ${lastName}`, gender: actualGender });
+            }
+
+            const listHTML = results.map(r => `
+                <div style="padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md); margin-bottom: var(--spacing-sm); display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-size: 1.1rem; font-weight: 600;">${r.name}</div>
+                        <div style="font-size: 0.875rem; color: var(--text-secondary);">${r.gender === 'male' ? '👨 Male' : '👩 Female'}</div>
+                    </div>
+                    <button class="btn btn-sm btn-secondary" onclick="copyText('${r.name}')">📋 Copy</button>
+                </div>
+            `).join('');
+
+            document.getElementById('nameList').innerHTML = listHTML;
+            document.getElementById('results').style.display = 'block';
+            showToast('Generated ' + count + ' names!', 'success');
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text);
+            showToast('Copied: ' + text, 'success');
+        }
+    </script>
+</body>
+
+</html>

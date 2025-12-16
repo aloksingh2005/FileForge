@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Calculator - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>⏰ Time Calculator</h1>
+                <p class="hero-subtitle">Add or subtract time durations</p>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Time 1</h4>
+                <div class="card-content">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--spacing-md);">
+                        <div>
+                            <label style="font-size: 0.875rem; color: var(--text-secondary);">Hours</label>
+                            <input type="number" id="hours1" value="2" min="0"
+                                style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary);">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.875rem; color: var(--text-secondary);">Minutes</label>
+                            <input type="number" id="minutes1" value="30" min="0" max="59"
+                                style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary);">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.875rem; color: var(--text-secondary);">Seconds</label>
+                            <input type="number" id="seconds1" value="15" min="0" max="59"
+                                style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary);">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-lg">
+                <h4 class="card-title">Time 2</h4>
+                <div class="card-content">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--spacing-md);">
+                        <div>
+                            <label style="font-size: 0.875rem; color: var(--text-secondary);">Hours</label>
+                            <input type="number" id="hours2" value="1" min="0"
+                                style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary);">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.875rem; color: var(--text-secondary);">Minutes</label>
+                            <input type="number" id="minutes2" value="45" min="0" max="59"
+                                style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary);">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.875rem; color: var(--text-secondary);">Seconds</label>
+                            <input type="number" id="seconds2" value="30" min="0" max="59"
+                                style="width: 100%; padding: 0.75rem; border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary);">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-lg">
+                <div class="card-content">
+                    <div style="display: flex; gap: var(--spacing-md);">
+                        <button class="btn btn-primary" onclick="add()" style="flex: 1;">➕ Add</button>
+                        <button class="btn btn-secondary" onclick="subtract()" style="flex: 1;">➖ Subtract</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">Result</h4>
+                <div class="card-content">
+                    <div
+                        style="text-align: center; background: var(--bg-tertiary); padding: var(--spacing-xl); border-radius: var(--radius-md);">
+                        <div style="font-size: 3rem; font-weight: 700; color: var(--accent-primary);" id="result">
+                            00:00:00</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function getSeconds(id) {
+            const hours = parseInt(document.getElementById(`hours${id}`).value) || 0;
+            const minutes = parseInt(document.getElementById(`minutes${id}`).value) || 0;
+            const seconds = parseInt(document.getElementById(`seconds${id}`).value) || 0;
+            return hours * 3600 + minutes * 60 + seconds;
+        }
+
+        function formatTime(totalSeconds) {
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function add() {
+            const total = getSeconds(1) + getSeconds(2);
+            document.getElementById('result').textContent = formatTime(total);
+            showToast('Times added!', 'success');
+        }
+
+        function subtract() {
+            const total = Math.max(0, getSeconds(1) - getSeconds(2));
+            document.getElementById('result').textContent = formatTime(total);
+            showToast('Times subtracted!', 'success');
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentence Counter - FileForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="../../index.html" class="logo">🔨 FileForge</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="../../index.html">All Tools</a></li>
+                        <li><button class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container container-narrow">
+            <div class="text-center mt-xl mb-lg">
+                <h1>📝 Sentence Counter</h1>
+                <p class="hero-subtitle">Count sentences in your text</p>
+            </div>
+
+            <div class="card mb-lg">
+                <div class="card-content">
+                    <textarea id="textInput" rows="15" placeholder="Enter or paste your text here..." oninput="count()"
+                        style="width: 100%; padding: var(--spacing-md); border: 2px solid var(--bg-tertiary); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem; resize: vertical;"></textarea>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 class="card-title">Statistics</h4>
+                <div class="card-content">
+                    <div
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--spacing-md);">
+                        <div
+                            style="text-align: center; background: var(--bg-tertiary); padding: var(--spacing-lg); border-radius: var(--radius-md);">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--accent-primary);"
+                                id="sentences">0</div>
+                            <div
+                                style="font-size: 0.875rem; color: var(--text-secondary); margin-top: var(--spacing-xs);">
+                                Sentences</div>
+                        </div>
+                        <div
+                            style="text-align: center; background: var(--bg-tertiary); padding: var(--spacing-lg); border-radius: var(--radius-md);">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--success);" id="words">0</div>
+                            <div
+                                style="font-size: 0.875rem; color: var(--text-secondary); margin-top: var(--spacing-xs);">
+                                Words</div>
+                        </div>
+                        <div
+                            style="text-align: center; background: var(--bg-tertiary); padding: var(--spacing-lg); border-radius: var(--radius-md);">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--warning);" id="chars">0</div>
+                            <div
+                                style="font-size: 0.875rem; color: var(--text-secondary); margin-top: var(--spacing-xs);">
+                                Characters</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Made with ❤️ by <a href="https://github.com/aloksingh2005" target="_blank">Alok Singh</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function count() {
+            const text = document.getElementById('textInput').value;
+
+            const sentences = text.match(/[^.!?]+[.!?]+/g) || [];
+            const words = text.trim().split(/\s+/).filter(w => w.length > 0);
+            const chars = text.length;
+
+            document.getElementById('sentences').textContent = sentences.length;
+            document.getElementById('words').textContent = words.length;
+            document.getElementById('chars').textContent = chars;
+        }
+    </script>
+</body>
+
+</html>
